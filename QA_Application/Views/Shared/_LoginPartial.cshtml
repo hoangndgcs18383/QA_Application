@@ -1,0 +1,9 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+
+ <div class="text logo-text">
+    <span asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" class="name">Hi! <br /> @User.Identity?.Name!</span>
+    <span class="profession">Web developer</span>
+</div>

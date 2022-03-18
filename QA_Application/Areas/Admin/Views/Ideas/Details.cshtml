@@ -1,0 +1,112 @@
+﻿@model QA_Application.Models.Idea
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+<div class="text">Detail Idea</div>
+
+
+
+<div class="post-wrapper">
+        <div class="post">
+
+            <div class="post__header header">
+                <div class="header__left">
+                    <a href="" class="">
+                        Ẩn Danh
+                    </a>
+                    <div class="post__auth author">
+                        <span class="author__name">
+                            <a href="">@Html.DisplayFor(model => model.Title)</a>
+                        </span>
+                        <i class="author__verified"></i>
+                    </div>
+                    <span class="post__date">
+                        <a href="">@Html.DisplayFor(model => model.CreatedDate)</a>
+                    </span>
+                    <span class="post__date-privacy-saparator">&nbsp;.</span>
+                    <i class="post__privacy"></i>
+                </div>
+
+                <div class="header__right">
+                    <div class="post__options options">
+                        <i class="options__icon"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post__content content">
+                <span class="content__paragraph">
+                   @Html.DisplayFor(model => model.Content)
+                </span>
+
+                <br />
+                <span class="content__paragraph">
+                    Category: 
+                   @Html.DisplayFor(model => model.Category.CategoryName)
+                </span>
+                <br>
+                <span class="content__paragraph">
+                    Tag: 
+                   @Html.DisplayFor(model => model.SpecialTag.Name)
+                </span>
+            </div>
+
+            <div class="post__footer footer">
+                 <!-- Reactions -->
+                <div class="footer__reactions reactions">
+                    <div class="reactions__emojis emojis">
+                        <span class="emojis__count">
+                            <a href="">193k</a>
+                        </span>
+                    </div>
+
+                    <div class="reactions__comments-shares">
+                        <span class="comments-shares__comments">
+                            <a href="">50k comments</a>
+                        </span>
+
+                        <span class="comments-shares__shares">
+                            <a href="">5.4k shares</a>
+                        </span>
+                    </div>
+                </div>
+                <!-- Buttons -->
+                <div class="footer__buttons buttons">
+                    <a class="buttons__like like">Like
+                        <i class="like__icon"></i>
+                    </a>
+                    <a class="buttons__comment commnet">Dislike
+                        <i class="commnet__icon"></i>
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@Model?.Id" class="buttons__share share">Edit
+                        <i class="share__icon"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@Model?.Id" class="buttons__share share">Delete
+                        <i class="share__icon"></i>
+                    </a>
+                    <a asp-action="Index" class="buttons__share share">Back
+                        <i class="share__icon"></i>
+                    </a>
+                </div>
+
+                <!-- Comments -->
+                <div class="footer__comments comments">
+                    <div class="comments__filter filter">Most Relevant
+                        <i class="filter__icon"></i>
+                    </div>
+                    <!-- Comments box -->
+                    <div class="comments__box box">
+                        <div class="box__profile">
+                            <img src="./images/profile-pic.jpg" alt="" class="profile__pic">
+                        </div>
+                        <div class="box__bar bar">
+                            <input type="text" placeholder="Write a commnet..." class="bar__input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

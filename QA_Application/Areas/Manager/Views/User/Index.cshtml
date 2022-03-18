@@ -1,0 +1,81 @@
+﻿@model IEnumerable<QA_Application.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="text">Account Manager</div>
+
+<div class="auth-form__controls mr-8 mb-8 right">
+    <a asp-action="Create" id="login-submit" class="btn btn--primary">Create New</a>
+</div>
+
+<table id="table" class="table table-hover table-mc-light-blue">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>User Name</th>
+        <th>Status</th>
+        <th>Link</th>
+
+    </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+    <tr>
+        <td data-title="ID">@Html.DisplayFor(modelItem => item.Id)</td>
+        <td data-title="FirstName">@Html.DisplayFor(modelItem => item.FirstName)</td>
+        <td data-title="LastName">@Html.DisplayFor(modelItem => item.LastName)</td>
+        <td data-title="UserName">@Html.DisplayFor(modelItem => item.UserName)</td>
+        @if(item.LockoutEnd > DateTime.Now && item.LockoutEnd != null)
+        {
+            <td>Inactive</td>
+            <td data-title="Link">
+                <a asp-action="Active" asp-route-id="@item.Id">Active</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        }
+        else
+        {
+            <td>Active</td>
+            <td data-title="Link">
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Lockout" asp-route-id="@item.Id">Lockout</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        }
+    </tr>   
+}
+    </tbody>
+</table>
+
+@section scripts {
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script>
+    $(function () {
+    var created = '@TempData["Created"]'
+        if (created != '') {
+            alertify.success(created);
+        }
+    });
+
+    $(function () {
+    var edited = '@TempData["Edited"]'
+        if (edited != '') {
+            alertify.success(edited);
+        }
+    });
+
+    $(function () {
+    var deleted = '@TempData["Deleted"]'
+        if (deleted != '') {
+            alertify.success(deleted);
+        }
+    });
+
+    </script>
+}

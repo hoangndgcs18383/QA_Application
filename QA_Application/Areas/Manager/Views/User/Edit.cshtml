@@ -1,0 +1,54 @@
+﻿@model QA_Application.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="text">Update Account</div>
+
+
+ <div class="modal">
+        <div class="modal__overlay">
+
+        </div>
+
+<div class="modal__body">
+
+        <form asp-action="Edit" method="post" enctype="multipart/form-data" class="auth-form">
+            <div class="auth-form__container">
+                <div class="auth-form__group">
+                    <div class="group">
+                        <input asp-for="UserName" readonly="readonly" class="group__input mt-16">
+                    </div>
+                </div>
+
+                <div class="auth-form__group">
+                    <div class="group">
+                        <input asp-for="FirstName" type="text" class="group__input mt-16" placeholder="First Name" >
+                    </div>
+                </div>
+
+                <div class="auth-form__group">
+                    <div class="group">
+                        <input asp-for="LastName" type="text" class="group__input mt-16" placeholder="Last Name" >
+                    </div>
+                </div>
+    
+                <div class="auth-form__aside mt-16">
+                    <div class="auth-form__help">
+                        <a asp-action="Index" class="auth-form__link auth-form__forgot">Back to list</a>
+                    </div>
+                </div>
+    
+                <div class="auth-form__controls mb-8">
+                    <button type="submit" class="btn btn--primary">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
