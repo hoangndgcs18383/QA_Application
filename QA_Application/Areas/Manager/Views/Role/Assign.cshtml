@@ -1,8 +1,10 @@
-﻿@{
-    ViewData["Title"] = "Create";
+﻿@model QA_Application.Areas.Manager.ViewModels.UserRoleViewModel
+
+@{
+    ViewData["Title"] = "Assign";
 }
 
-<div class="text">Create Role</div>
+<div class="text">Assign Role</div>
 
 
  <div class="modal">
@@ -12,12 +14,15 @@
 
 <div class="modal__body">
 
-        <form asp-action="Create" method="post" enctype="multipart/form-data" class="auth-form">
+        <form asp-action="Assign" method="post" enctype="multipart/form-data" class="auth-form">
             <div class="auth-form__container">
                 <h3>@ViewBag.message</h3>
                 <div class="auth-form__group">
                     <div class="group">
-                        <input id="name" name="name" type="text" value="@ViewBag.name" class="group__input mt-16" placeholder="Role Name" required>
+                        <select asp-for="UserId" asp-items="@ViewBag.UserId" class="group__input mt-16"></select>
+                    </div>
+                    <div class="group">
+                        <select asp-for="RoleId" asp-items="@ViewBag.RoleId" class="group__input mt-16"></select>
                     </div>
                 </div>
     
@@ -35,6 +40,8 @@
     </div>
 </div>
 
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+

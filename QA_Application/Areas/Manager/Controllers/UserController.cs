@@ -33,6 +33,7 @@ namespace QA_Application.Areas.Account.Controllers
                 var identity = await _userManager.CreateAsync(user, user.PasswordHash);
                 if (identity.Succeeded)
                 {
+                    var isSaveRole = await _userManager.AddToRoleAsync(user, role: "User");
                     TempData["Created"] = "Account has been created successfully";
                     return RedirectToAction("Index");
                 }

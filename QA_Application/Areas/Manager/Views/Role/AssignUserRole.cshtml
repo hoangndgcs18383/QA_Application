@@ -1,32 +1,24 @@
 ﻿@{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "User Role";
 }
 
 
-<div class="text">Account Roles</div>
-
-<div class="auth-form__controls mr-8 mb-8 right">
-    <a asp-action="Create" id="login-submit" class="btn btn--primary">Create New</a>
-</div>
+<div class="text">Assign User Role</div>
 
 <table id="table" class="table table-hover table-mc-light-blue">
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Link</th>
+        <th>User Name</th>
+        <th>Role Name</th>
 
     </tr>
     </thead>
     <tbody>
-@foreach (var item in ViewBag.Roles)
+@foreach (var item in ViewBag.UserRoles)
 {
     <tr>
-        <td data-title="ID">@item.Name</td>
-
-        <td data-title="Link">
-            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-        </td>
+        <td data-title="UserName">@item.UserName</td>
+        <td data-title="RoleName">@item.RoleName</td>
     </tr>   
 }
     </tbody>
