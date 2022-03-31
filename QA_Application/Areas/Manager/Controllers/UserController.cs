@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using QA_Application.Data;
 using QA_Application.Models;
@@ -6,6 +7,7 @@ using QA_Application.Models;
 namespace QA_Application.Areas.Account.Controllers
 {
     [Area("Manager")]
+    [Authorize(Roles =("Admin"))]
     public class UserController : Controller
     {
         UserManager<IdentityUser> _userManager;

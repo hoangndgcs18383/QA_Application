@@ -1,5 +1,4 @@
-﻿
-@inject IHttpContextAccessor HttpContextAccesser
+﻿@inject IHttpContextAccessor HttpContextAccesser
 @{
     var userRole = HttpContextAccesser.HttpContext.Session.GetString(key: "roleName");
 }
@@ -48,9 +47,9 @@
 
                 <ul class="menu-links">
                     <li class="nav-link">
-                        <a asp-area="Admin" asp-controller="Ideas" asp-action="Index">
+                        <a asp-area="Dashboard" asp-controller="Ideas" asp-action="Index">
                           <i class='bx bxs-dashboard icon' ></i>
-                            <span class="text nav-text">Dashboard</span>
+                            <span class="text nav-text">Post</span>
                         </a>
                     </li>
                     @if(userRole == "Admin")
@@ -65,26 +64,33 @@
                         <li class="nav-link">
                             <a  asp-area="Manager" asp-controller="Role" asp-action="Index">
                                 <i class='bx bx-street-view icon'></i>
-                                <span class="text nav-text">Likes</span>
+                                <span class="text nav-text">Role</span>
                             </a>
                         </li>
 
                         <li class="nav-link">
-                            <a asp-area="Admin" asp-controller="Categories" asp-action="Index">
+                            <a target="_blank" asp-area="Files" asp-controller="FileManager" asp-action="Index">
+                                <i class='bx bx-file icon'></i>
+                                <span class="text nav-text">File</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-link">
+                            <a asp-area="Dashboard" asp-controller="Categories" asp-action="Index">
                                 <i class='bx bx-category icon'></i>
                                 <span class="text nav-text">Category</span>
                             </a>
                         </li>
 
                         <li class="nav-link">
-                            <a asp-area="Admin" asp-controller="SpecialTags" asp-action="Index">
+                            <a asp-area="Dashboard" asp-controller="SpecialTags" asp-action="Index">
                                 <i class='bx bx-purchase-tag-alt icon'></i>
                                 <span class="text nav-text">Special Tag</span>
                             </a>
                         </li>
                     }
 
-                    @if(userRole == "Manager")
+                    @if(userRole == "Manager" || userRole == "User")
                     {
                         <li class="nav-link">
                             <a href="#">
@@ -93,14 +99,6 @@
                             </a>
                         </li>
                     }
-
-
-                    <li class="nav-link">
-                        <a href="#">
-                            <i class='bx bx-wallet icon' ></i>
-                            <span class="text nav-text">Wallets</span>
-                        </a>
-                    </li>
 
                 </ul>
             </div>

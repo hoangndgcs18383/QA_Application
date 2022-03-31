@@ -1,0 +1,112 @@
+﻿@model IEnumerable<QA_Application.Models.Idea>
+
+@inject IHttpContextAccessor HttpContextAccesser
+
+
+@{
+    ViewData["Title"] = "Index";
+    var userRole = HttpContextAccesser.HttpContext.Session.GetString(key: "roleName");
+}
+
+
+<div class="text">Index</div>
+
+<div class="auth-form__controls mr-8 mb-8 right">
+    <a asp-action="Create" id="login-submit" class="btn btn--primary mr-8">Create New</a>
+    <a asp-action="GetPost" id="login-submit" class="btn btn--primary">Post</a>
+</div>
+
+<table id="table" class="table table-hover table-mc-light-blue">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>CreatedDate</th>
+        <th>isLocked</th>
+        <th>Category</th>
+        <th>Link</th>
+        <th>Status</th>
+
+    </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+        <tr>
+                @if(item.isApproved == null)
+                {
+                    <td data-title="ID">
+                    <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
+                    </td>
+                    <td data-title="ID">@item.CreatedDate</td>
+                    <td data-title="ID">@item.isLocked</td>
+                    <td data-title="ID">@item.Category.CategoryName</td>
+                    @if(userRole == "Admin")
+                    {
+                        <td data-title="Link">
+                            <a asp-action="Approve" asp-route-id="@item.Id">Approve</a> |
+                            <a asp-action="Decline" asp-route-id="@item.Id">Decline</a>
+                        </td>
+                        <td data-title="Status">Sending to approve...</td>
+                    }
+                    else
+                    {
+
+                        <td data-title="Link">
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                        if(item.Category.FinalDeadline > DateTime.Now)
+                        {
+                            <td data-title="Status">Wait to approve...</td>
+                        }
+                        else
+                        {
+                            <td data-title="Status">The ideas has been timeout to approve...</td>    
+                        }
+                    }
+                }
+                @if(item.isApproved == false && User.Identity!.Name == item.Author.UserName)
+                {
+                    <td data-title="ID">
+                    <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
+                    </td>
+                    <td data-title="ID">@item.CreatedDate</td>
+                    <td data-title="ID">@item.isLocked</td>
+                    <td data-title="ID">@item.Category.CategoryName</td>
+                    @if(userRole == "Admin")
+                    {
+                        <td data-title="Link">
+                            <a asp-action="Approve" asp-route-id="@item.Id">Approve</a> |
+                            <a asp-action="Decline" asp-route-id="@item.Id">Decline</a> |
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                        <td data-title="Status">Sending to approve...</td>
+                    }
+                    else
+                    {
+
+                        <td data-title="Link">
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                        if(item.Category.FinalDeadline > DateTime.Now)
+                        {
+                            <td data-title="Status">The ideas has been declined</td>
+                        }
+                        else
+                        {
+                            <td data-title="Status">The ideas has been timeout to approve...</td>    
+                        }
+                    }
+                }
+        </tr>      
+}
+    </tbody>
+</table>
+
+
+
+@section Scripts {
+    <partial name="~/Views/Shared/_AlertifyPartial.cshtml"/>
+}

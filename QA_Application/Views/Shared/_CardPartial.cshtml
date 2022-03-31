@@ -1,0 +1,22 @@
+﻿@model IEnumerable<QA_Application.Models.Idea>
+
+<section class="cards-wrapper">
+    @foreach (var item in Model)
+    {
+    <div class="card">
+        <div class="basic-card basic-card-aqua">
+            <div class="card-content">
+                <span class="card-title">@Html.DisplayFor(modelItem => item.Category.CategoryName)</span>
+                <p class="card-text">
+                    @Html.DisplayFor(modelItem => item.Content)
+                </p>
+            </div>
+
+            <div class="card-link">
+                <a asp-action="Details" asp-route-id="@item.Id" title="Read Full"><span>Read Full</span></a>
+            </div>
+        </div>
+            
+    </div>   
+    }
+</section>

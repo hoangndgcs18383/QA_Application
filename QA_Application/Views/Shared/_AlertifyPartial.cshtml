@@ -1,0 +1,24 @@
+﻿<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+<script>
+$(function () {
+var created = '@TempData["Success"]'
+    if (created != '') {
+        alertify.success(created);
+    }
+});
+
+$(function () {
+var warning = '@TempData["Warning"]'
+    if (edited != '') {
+        alertify.warning(warning);
+    }
+});
+
+$(function () {
+var error = '@TempData["Error"]'
+    if (deleted != '') {
+        alertify.error(error);
+    }
+});
+
+</script>

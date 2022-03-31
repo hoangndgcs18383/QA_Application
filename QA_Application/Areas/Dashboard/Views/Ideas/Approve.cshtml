@@ -1,0 +1,54 @@
+﻿@model QA_Application.Models.Idea
+
+@{
+    ViewData["Title"] = "Approve";
+}
+
+<div class="text">Approve Idea</div>
+
+
+ <div class="modal">
+        <div class="modal__overlay">
+
+        </div>
+
+<div class="modal__body">
+
+        <form asp-action="Approve" method="post" enctype="multipart/form-data" class="auth-form">
+            <div class="auth-form__container">
+                <input type="hidden" asp-for="Id" />
+                <div class="auth-form__group">
+                    <div class="group">
+                        <input asp-for="Title" readonly="readonly" type="text" class="group__input mt-16" placeholder="Title" >
+                    </div>
+        
+                    <div class="group">
+                        <input asp-for="Content" readonly="readonly" type="text" class="group__input mt-16" placeholder="Content" >
+                    </div>
+                    <div class="group">
+                        <select asp-for="CategoryId" readonly="readonly" asp-items="@ViewBag.CategoryId" class="group__input mt-16"></select>
+                    </div>
+                    <div class="group">
+                        <select asp-for="SpecialTagId" readonly="readonly" asp-items="@ViewBag.SpecialTagId" class="group__input mt-16"></select>
+                    </div>
+                </div>
+    
+                <div class="auth-form__aside mt-16">
+                    <div class="auth-form__help">
+                        <a asp-action="Index" class="auth-form__link auth-form__forgot">Back to list</a>
+                    </div>
+                </div>
+
+                <div class="auth-form__controls mb-8">
+                    <button type="submit" class="btn btn--primary">Approve</button>
+                </div>   
+                
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

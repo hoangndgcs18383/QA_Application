@@ -1,0 +1,79 @@
+﻿@model IEnumerable<QA_Application.Models.Category>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="text">Cetegory</div>
+
+<div class="auth-form__controls mr-8 mb-8 left">
+    <span class="total__item">Total categories: @ViewBag.Categories</span>
+</div>
+
+<div class="auth-form__controls mr-8 mb-8 right">
+    <a asp-action="Create" id="login-submit" class="btn btn--primary">Create New</a>
+</div>
+
+
+<table id="table" class="table table-hover table-mc-light-blue">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>First Deadline</th>
+        <th>Final Deadline</th>
+        <th>Status</th>
+        <th>Link</th>
+
+    </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+            await RenderCategory(item, 0);
+        }
+    </tbody>
+</table>
+
+@{
+    async Task RenderCategory(Category item, int level)
+    {
+        string prefix = String.Concat(Enumerable.Repeat("*", level));
+
+        <tr>
+            <td data-title="Name">
+                @prefix
+                <a asp-action="Edit" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.CategoryName)</a>
+            </td>
+            <td data-title="Description">@Html.DisplayFor(modelItem => item.Description)</td>
+            <td data-title="FirstDeadline">
+                @Html.DisplayFor(modelItem => item.FirstDeadline)
+            </td>
+            <td data-title="FinalDeadline">@Html.DisplayFor(modelItem => item.FinalDeadline)</td>
+            @if(item.FinalDeadline > DateTime.Now)
+            {
+                <td data-title="Status">On</td>
+            }
+            else
+            {
+                <td data-title="Status">Off</td>
+            }
+            <td data-title="Link">
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+        if(item.CategoryChildren?.Count > 0)
+        {
+            foreach(var cCat in item.CategoryChildren)
+            {
+                await RenderCategory(cCat, level + 1);
+            }
+        }
+    }
+}
+
+@section Scripts {
+    <partial name="~/Views/Shared/_AlertifyPartial.cshtml"/>
+}

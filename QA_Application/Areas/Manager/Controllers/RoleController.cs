@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using QA_Application.Areas.Manager.ViewModels;
 using QA_Application.Data;
+using QA_Application.Models;
+using System.ComponentModel;
 
 namespace QA_Application.Areas.Manager.Controllers
 {
     [Area("Manager")]
+    [Authorize(Roles = ("Admin"))]
     public class RoleController : Controller
     {
         RoleManager<IdentityRole> _roleManager;
@@ -23,6 +27,7 @@ namespace QA_Application.Areas.Manager.Controllers
         {
             var roles = _roleManager.Roles.ToList();
             ViewBag.Roles = roles;
+            ViewBag.cRoles = roles.Count;
             return View();
         }
 
@@ -48,7 +53,7 @@ namespace QA_Application.Areas.Manager.Controllers
 
             if (result.Succeeded)
             {
-                TempData["Created"] = "Role has been created successfully";
+                TempData["Success"] = "Role has been created successfully";
                 return RedirectToAction("Index");
             }
             return View();
@@ -83,7 +88,7 @@ namespace QA_Application.Areas.Manager.Controllers
 
             if (result.Succeeded)
             {
-                TempData["Edited"] = "Role has been updated successfully";
+                TempData["Success"] = "Role has been updated successfully";
                 return RedirectToAction("Index");
             }
             return View();
@@ -108,7 +113,7 @@ namespace QA_Application.Areas.Manager.Controllers
             var result = await _roleManager.DeleteAsync(role);
             if (result.Succeeded)
             {
-                TempData["Deleted"] = "Role has been deleted successfully";
+                TempData["Success"] = "Role has been deleted successfully";
                 return RedirectToAction("Index");
             }
 
@@ -128,6 +133,9 @@ namespace QA_Application.Areas.Manager.Controllers
             var user = _context.ApplicationUsers.FirstOrDefault(c => c.Id == userRoleViewModel.UserId);
             var isCheckRoleAssign = await _userManager.IsInRoleAsync(user, userRoleViewModel.RoleId);
 
+
+            RoleNames = (await _userManager.GetRolesAsync(user)).ToArray();
+
             if (isCheckRoleAssign)
             {
                 ViewData["UserId"] = new SelectList(_context.ApplicationUsers
@@ -141,13 +149,19 @@ namespace QA_Application.Areas.Manager.Controllers
             var addRoleToUser = await _userManager.AddToRoleAsync(user, userRoleViewModel.RoleId);
             if (addRoleToUser.Succeeded)
             {
-                TempData["Created"] = "Role has been assigned successfully";
+                TempData["Success"] = "Role has been assigned successfully";
                 return RedirectToAction("Index");
             }
             return View();
         }
 
-        public ActionResult AssignUserRole()
+        public ApplicationUser user { get; set; }
+
+        [BindProperty]
+        [DisplayName("Roles assign to user")]
+        public string[] RoleNames { get; set; }
+
+        public async Task<ActionResult> AssignUserRole()
         {
             var result = from ur in _context.UserRoles
                          join r in _context.Roles on ur.RoleId equals r.Id
@@ -159,6 +173,7 @@ namespace QA_Application.Areas.Manager.Controllers
                              UserName = a.UserName,
                              RoleName = r.Name
                          };
+
             ViewBag.UserRoles = result;
             return View();
         }

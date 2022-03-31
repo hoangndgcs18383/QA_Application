@@ -21,6 +21,7 @@
     --black1: #1c1e21;
     --black2: #050505;
     --green: #2f9a48;
+    --danger: #f32013;
     --border-color: #dbdbdb;
     --header-height: 120px;
     --navbar-height: 34px;
@@ -43,7 +44,6 @@ html,
 body {
     position: relative;
     min-height: 100%;
-    height: 100%;
 }
 
 html {
@@ -92,6 +92,13 @@ p {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+.text-danger {
+    font-size: 1.5rem;
+    color: var(--danger);
+    font-weight: 500;
+}
+
 
 ::selection {
     background-color: var(--primary-color);
@@ -169,8 +176,6 @@ body.dark {
     }
 
 /* Responsive */
-
-
 .content {
     padding-top: 36px;
 }
@@ -226,6 +231,15 @@ body.dark {
 /* Modal */
 
 .modal {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    animation: fadeIn linear 0.1s;
+}
+
+.modal__login {
     position: fixed;
     top: 0;
     right: 0;
@@ -236,6 +250,11 @@ body.dark {
 }
 
 .modal__overlay {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.modal__overlay__login {
     position: absolute;
     width: 100%;
     height: 100%;

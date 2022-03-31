@@ -1,0 +1,74 @@
+﻿@model QA_Application.Models.Category
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="text">Edit Category > @Model.CategoryName</div>
+
+
+ <div class="modal">
+        <div class="modal__overlay">
+
+        </div>
+
+<div class="modal__body">
+
+        <form asp-action="Edit" method="post" enctype="multipart/form-data" class="auth-form">
+            <div class="auth-form__container">
+                <div class="auth-form__group">
+                    <div class="group">
+                        <label asp-for="CategoryName"></label>
+                        @Html.EditorFor(m => m.CategoryName, new {htmlAttributes = new { @class = "group__input mt-16", @type = "text" ,@placeholder="Category Name"} })
+                        <span asp-validation-for="CategoryName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="auth-form__group">
+                    <div class="group">
+                        <label asp-for="Description"></label>
+                        @Html.EditorFor(m => m.Description, new {htmlAttributes = new { @class = "group__input mt-16", @type = "text", @placeholder="Description" } })
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="auth-form__group">
+                    <div class="group">
+                        <label asp-for="FirstDeadline"></label>
+                        @Html.EditorFor(m => m.FirstDeadline, "{0:dd/MM/yyyy}", new {htmlAttributes = new { @class = "group__input mt-16", @type = "date" , @placeholder="First Deadline"} })
+                        <span asp-validation-for="FirstDeadline" class="text-danger"></span>
+                    </div>
+                </div>
+    
+               <div class="auth-form__group">
+                    <div class="group"> 
+                        <label asp-for="FinalDeadline"></label>
+                        @Html.EditorFor(m => m.FinalDeadline, "{0:dd/MM/yyyy}", new {htmlAttributes = new { @class = "group__input mt-16", @type = "date" , @placeholder="Final Deadline" } })
+                        <span asp-validation-for="FinalDeadline" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="auth-form__group">
+                    <div class="group"> 
+                        <label asp-for="ParentCategoryId"></label>
+                        <select asp-for="ParentCategoryId" asp-items="@ViewBag.ParentCategoryId" class="group__input mt-16"></select>
+                    </div>
+                </div>
+
+                <div class="auth-form__aside mt-16">
+                    <div class="auth-form__help">
+                        <a asp-action="Index" class="auth-form__link auth-form__forgot">Back to list</a>
+                    </div>
+                </div>
+    
+                <div class="auth-form__controls mb-8">
+                    <button type="submit" class="btn btn--primary">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

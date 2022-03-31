@@ -1,0 +1,36 @@
+﻿@model IEnumerable<QA_Application.Models.Idea>
+
+@{
+    ViewData["Title"] = "GetPost";
+}
+
+
+<div class="text">Post</div>
+
+<div class="auth-form__controls mr-8 mb-8 right">
+    <a asp-action="Create" id="login-submit" class="btn btn--primary">Create New</a>
+</div>
+
+<section class="cards-wrapper">
+    @foreach (var item in Model)
+    {
+        @if (item.isApproved == true)
+        {
+        <div class="card">
+            <div class="basic-card basic-card-aqua">
+                <div class="card-content">
+                    <span class="card-title">@Html.DisplayFor(modelItem => item.Category.CategoryName)</span>
+                    <p class="card-text">
+                        @Html.Raw(item.Content)
+                    </p>
+                </div>
+
+                <div class="card-link">
+                    <a asp-action="Details" asp-route-id="@item.Id" title="Read Full"><span>Read Full</span></a>
+                </div>
+            </div>
+            
+        </div>
+        }
+    }
+</section>

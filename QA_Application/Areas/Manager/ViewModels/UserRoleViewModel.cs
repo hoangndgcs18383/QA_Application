@@ -5,10 +5,10 @@ namespace QA_Application.Areas.Manager.ViewModels
     public class UserRoleViewModel
     {
         [Required]
-        [Display(Name = "User")]
+        [Display(Name = "Role")]
         public string RoleId { get; set; }
         [Required]
-        [Display(Name = "Role")]
+        [Display(Name = "User")]
         public string UserId { get; set; }
     }
 }

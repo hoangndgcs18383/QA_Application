@@ -1,8 +1,17 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using QA_Application.Data;
+using QA_Application.Models;
+using QA_Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Add service mailkit
+builder.Services.AddOptions();
+var mailSettings = builder.Configuration.GetSection("MailSetting");
+builder.Services.Configure<MailSettings>(mailSettings);
+builder.Services.AddTransient<SendMailService>();
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -20,8 +29,7 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromSeconds(10);
-    options.Cookie.HttpOnly = true;
+    options.Cookie.HttpOnly = false;
     options.Cookie.IsEssential = true;
 });
 
@@ -52,7 +60,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     // Cookie settings
     options.Cookie.HttpOnly = true;
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
 
     options.LoginPath = "/Identity/Account/Login";
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
@@ -76,6 +84,13 @@ else
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseStaticFiles(new StaticFileOptions() { 
+    FileProvider = new PhysicalFileProvider(
+       Path.Combine(Directory.GetCurrentDirectory(), "Uploads")  
+    ),
+    RequestPath = "/contents"
+});
+
 app.UseRouting();
 app.UseSession();
 app.UseAuthentication();
@@ -86,17 +101,51 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapAreaControllerRoute(
         name: "areas",
-        areaName: "Admin",
-        pattern: "Admin/{controller=Home}/{action=Index}/{id?}"
-    );
+        areaName: "Dashboard",
+        pattern: "Dashboard/{controller=Home}/{action=Index}/{id?}"
+        );
+    endpoints.MapAreaControllerRoute(
+        name: "areas",
+        areaName: "Files",
+        pattern: "Dashboard/{controller=Home}/{action=Index}/{id?}"
+        );
     endpoints.MapAreaControllerRoute(
         name: "areas",
         areaName: "Manager",
         pattern: "Manager/{controller=Home}/{action=Index}/{id?}"
-);
+        );
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
+    /*endpoints.MapGet("/TestMail", async (context) =>
+    {
+        var message = await MailUtils.SendMail("hoangndgcs18383@gmail.com", "hoangndgcs18383@gmail.com", "Test", "Xin chao");
+
+        await context.Response.WriteAsync(message);
+    });
+
+    endpoints.MapGet("/TestGmail", async (context) =>
+    {
+        var message = await MailUtils.SendMailGoogleSmtp("hoangndgcs18383@gmail.com", "hoangndgcs18383@gmail.com", "Test", "Xin chao", "hoangndgcs18383@gmail.com", "Jiyeonpark");
+
+        await context.Response.WriteAsync(message);
+    });*/
+
+    endpoints.MapGet("/TestSendMailService", async (context) =>
+    {
+        var sendMailService = context.RequestServices.GetService<SendMailService>();
+
+        var mailContent = new MailContent();
+
+        mailContent.To = "hoangndgcs18383@gmail.com";
+        mailContent.Subject = "Kiem tra noi dung";
+        mailContent.Body = "Test";
+        
+        await sendMailService.SendMail(mailContent);
+
+        await context.Response.WriteAsync("Send mail");
+    });
+
 });
 
 

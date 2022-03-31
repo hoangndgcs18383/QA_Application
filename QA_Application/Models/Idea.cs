@@ -5,18 +5,21 @@ namespace QA_Application.Models
 {
     public class Idea
     {
+        [Key]
         public int Id { get; set; }
         [Required]
         public string Title { get; set; }
         [Required]
         public string Content { get; set; }
+        [Display(Name = "File .pdf")]
+        public string? FileSubmit { get; set; }
         [Required]
         [Display(Name = "Create At")]
-        public DateTime CreatedDate { get; set; }
-        [Required]
-        [Display(Name = "Available")]
-        public bool isAvailable { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime? LastUpdateDate { get; set; }
+        public bool? isApproved { get; set; }
 
+        public bool? isLocked { get; set; }
         [Required]
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
@@ -28,6 +31,10 @@ namespace QA_Application.Models
         public int SpecialTagId { get; set; }
         [ForeignKey("SpecialTagId")]
         public SpecialTag SpecialTag { get; set; }
+        public string AuthorId { get; set; }
+        [ForeignKey("AuthorId")]
+        public ApplicationUser Author { get; set; }
+        public virtual IEnumerable<Comment> Comments { get; set; }
 
     }
 }

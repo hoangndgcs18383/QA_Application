@@ -5,8 +5,13 @@
 
 <div class="text">Account Roles</div>
 
+<div class="auth-form__controls mr-8 mb-8 left">
+    <span class="total__item">Total roles: @ViewBag.cRoles</span>
+</div>
+
 <div class="auth-form__controls mr-8 mb-8 right">
-    <a asp-action="Create" id="login-submit" class="btn btn--primary">Create New</a>
+    <a asp-action="Create" class="btn btn--primary">Create New</a>
+    <a asp-action="Assign" class="btn btn--primary ml-12">Assign</a>
 </div>
 
 <table id="table" class="table table-hover table-mc-light-blue">
@@ -32,30 +37,6 @@
     </tbody>
 </table>
 
-@section scripts {
-    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-    <script>
-    $(function () {
-    var created = '@TempData["Created"]'
-        if (created != '') {
-            alertify.success(created);
-        }
-    });
-
-    $(function () {
-    var edited = '@TempData["Edited"]'
-        if (edited != '') {
-            alertify.success(edited);
-        }
-    });
-
-    $(function () {
-    var deleted = '@TempData["Deleted"]'
-        if (deleted != '') {
-            alertify.success(deleted);
-        }
-    });
-
-    </script>
+@section Scripts {
+    <partial name="~/Views/Shared/_AlertifyPartial.cshtml"/>
 }
-

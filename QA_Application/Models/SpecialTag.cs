@@ -4,7 +4,10 @@ namespace QA_Application.Models
 {
     public class SpecialTag
     {
+        [Key]
         public int Id { get; set; }
-        public string Name { get; set; }
+        [Required]
+        [Display(Name = "Special Tag Name")]
+        public string SpecialTagName { get; set; }
     }
 }
