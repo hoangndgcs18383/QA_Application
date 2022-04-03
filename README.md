@@ -12,7 +12,7 @@ main project_Q6
 -- Complete => approve, delcine function for admin, add first deadline, final deadline to category
 -- ...
 
-## Update new 1/4/2022
+## Update new 4/4/2022
 -- Paging
 -- Layout FE
 
