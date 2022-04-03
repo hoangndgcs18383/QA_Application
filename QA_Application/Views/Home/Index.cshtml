@@ -1,5 +1,26 @@
-﻿@{
+﻿@inject IHttpContextAccessor HttpContextAccesser
+@{
     ViewData["Title"] = "Home Page";
+    var userRole = HttpContextAccesser.HttpContext.Session.GetString(key: "roleName");
 }
 
-<div class="text">Home Page</div>
+
+@if(userRole == "Admin")
+{
+    <div class="text">Administrator Manager</div>
+    <div class="jumbotron">
+        <h1 class="display-4">Đây là một Jumbotron</h1>
+        <p class="lead">Nghĩa từ <code>Jumbotron</code>: nó còn gọi là <code>Jumbovision</code>, 
+        là một màn hình lớn, đầu tiên phát triển bởi Sony và được sử dụng hiện thị thông tin ở 
+        các nhà thi đấu thể thao và những điểm hòa nhạc để hiện thị các thông tin quan trọng 
+        một sự kiện nào đó</p>
+
+
+        <hr class="my-4">
+        <p>Để <code>Jumbotron</code> trong <code>Bootstrap</code> ấn tượng có thể sử 
+        dụng các lớp trình bày kích thước lớn như 
+        <code>.display-2</code> <code>.btn-lg</code> <code>...</code></p>
+        <a asp-area="Dashboard" asp-controller="Ideas" asp-action="GetPost" 
+            class="btn btn--primary btn-lg" role="button">Xem thêm</a>
+    </div>
+}

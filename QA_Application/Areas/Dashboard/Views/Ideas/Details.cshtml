@@ -17,17 +17,17 @@
 
             <div class="post__header header">
                 <div class="header__left">
-                    <a href="" class="">
-                        Ẩn Danh
+                    <a href="" class="">                        
                     </a>
                     <div class="post__auth author">
                         <span class="author__name">
-                            <a href="">@Html.DisplayFor(model => model.Title)</a>
+                            @Html.DisplayFor(model => model.Title)
                         </span>
                         <i class="author__verified"></i>
                     </div>
                     <span class="post__date">
-                        <a href="">@Html.DisplayFor(model => model.CreatedDate)</a>
+                        @ViewBag.time
+                        <i class='bx bx-time'></i>
                     </span>
                     <span class="post__date-privacy-saparator">&nbsp;.</span>
                     <i class="post__privacy"></i>
@@ -46,15 +46,13 @@
                 </span>
 
                 <br />
-                <span class="content__paragraph">
-                    Category: 
-                   @Html.DisplayFor(model => model.Category.CategoryName)
-                </span>
-                <br>
-                <span class="content__paragraph">
-                    Tag: 
-                   @Html.DisplayFor(model => model.SpecialTag.SpecialTagName)
-                </span>
+                @if(Model.FileSubmit == "nothing.pdf"){
+
+                }
+                else {
+                    <span>Model.FileSubmit</span>
+                    <a asp-action="PDFViewer" target="_blank">New tab</a>
+                }
             </div>
 
             <div class="post__footer footer">
@@ -68,23 +66,20 @@
 
                     <div class="reactions__comments-shares">
                         <span class="comments-shares__comments">
-                            <a href="">50k comments</a>
+                            <a href="">@ViewBag.comments comments</a>
                         </span>
 
-                        <span class="comments-shares__shares">
-                            <a href="">5.4k shares</a>
-                        </span>
                     </div>
                 </div>
                 @if(firstDeadline > now)
                 {
                 <!-- Buttons -->
                 <div class="footer__buttons buttons">
-                    <a class="buttons__like like">Like
-                        <i class="like__icon"></i>
+                    <a class="buttons__like like">
+                        <i class='bx bx-like'></i>
                     </a>
-                    <a class="buttons__comment commnet">Dislike
-                        <i class="commnet__icon"></i>
+                    <a class="buttons__comment commnet">
+                        <i class='bx bx-dislike' ></i>
                     </a>
                     <a asp-action="Edit" asp-route-id="@Model?.Id" class="buttons__share share">Edit
                         <i class="share__icon"></i>
@@ -99,30 +94,27 @@
                 }
                 @if(finalDeadline > now)
                 {
-                <!-- Comments -->
-                <div class="footer__comments comments">
-                    <div class="comments__filter filter">Most Relevant
-                        <i class="filter__icon"></i>
-                    </div>
-                    <!-- Comments box -->
-                    <div class="comments__box box">
-                        <div class="box__bar bar">
-                            <input type="text" placeholder="Write a commnet..." class="bar__input">
-                        </div>
-                    </div>
-                </div>
 
-                 <!-- Friend comments -->
-                @*<div class="commets__friend-comment friend-comment">
-                    <div class="friend-comment__comment comment">
-                        <a href="" class="comment__auth">
-                            @Html.DisplayFor(model => model.Comment.Author.FirstName)
-                        </a>
-                        <span class="comment__content">
-                            @Html.DisplayFor(model => model.Comment.Message)
-                        </span>
-                        </div>
-                 </div>*@
+                    await Html.RenderPartialAsync("_CommentPartial.cshtml", new CommentViewModel { IdeaId = Model.Id, CommentId = 0 });
+
+                    foreach(var c in Model.Comments)
+                    {
+                        if(c != null)
+                        {
+                            <!-- Friend comments -->
+                            <div class="commets__friend-comment friend-comment">
+                                <img src="https://banner2.cleanpng.com/20180411/wow/kisspng-smiley-emoticon-anonymous-zazzle-avatar-avatar-5acde37c8a8d22.0531790415234425565675.jpg" class="friend-comment__avatar"></img>
+                                <div class="friend-comment__comment comment">
+                                    <a href="" class="comment__auth">
+                                        @c.Author.UserName
+                                    </a>
+                                    <span class="comment__content">
+                                        Reply: @c.Message
+                                    </span>
+                                    </div>
+                            </div>
+                        }
+                    }
                 }
                 </div>
 

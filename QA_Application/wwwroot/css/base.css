@@ -86,7 +86,7 @@ a {
     letter-spacing: 1px;
 }
 
-p {
+para-mini{
     width: 180px;
     overflow: hidden;
     white-space: nowrap;
@@ -237,6 +237,7 @@ body.dark {
     left: 0;
     display: flex;
     animation: fadeIn linear 0.1s;
+    position: unset;
 }
 
 .modal__login {

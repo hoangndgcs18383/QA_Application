@@ -34,7 +34,7 @@ namespace QA_Application.Models
         public string AuthorId { get; set; }
         [ForeignKey("AuthorId")]
         public ApplicationUser Author { get; set; }
-        public virtual IEnumerable<Comment> Comments { get; set; }
+        public virtual List<Comment> Comments { get; set; }
 
     }
 }

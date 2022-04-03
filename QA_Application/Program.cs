@@ -29,6 +29,7 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
+    options.IdleTimeout = TimeSpan.FromDays(1);
     options.Cookie.HttpOnly = false;
     options.Cookie.IsEssential = true;
 });

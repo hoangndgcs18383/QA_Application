@@ -1,0 +1,17 @@
+﻿@{
+	Layout = "null";
+	<link rel="stylesheet" href="../Views/Shared/delete.css" asp-append-version="true" />
+}
+
+<div>
+	<p>Do you <span class="heart">♥</span> CSS ?</p>
+	<a class="button" href="javascript:void(0);">No</a>
+	<a class="button" href="javascript:void(0);">Yes</a>
+</div>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+@section Scripts {
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+}

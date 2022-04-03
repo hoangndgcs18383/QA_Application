@@ -7,30 +7,48 @@
 
 <div class="text">Post</div>
 
-<div class="auth-form__controls mr-8 mb-8 right">
-    <a asp-action="Create" id="login-submit" class="btn btn--primary">Create New</a>
+<div class="auth-form__controls mr-8 mb-8 left">
+    <span class="total__item">Total ideas: @ViewBag.totalIdeas</span>
 </div>
 
-<section class="cards-wrapper">
+<div class="auth-form__controls mr-8 mb-8 right">
+    <a asp-action="Create" class="btn btn--primary">Create New</a>
+</div>
+
+if(@(ViewBag.ideasNotAp > 0){
+    <div class="auth-form__controls mr-8 mb-8 right">
+        <a asp-action="Index" class="btn btn--primary">Approve
+             <span class="badge badge-danger">@ViewBag.ideasNotAp</span>
+        </a>
+    
+    </div>
+}
+
+<div class="cards-wrapper">
     @foreach (var item in Model)
     {
         @if (item.isApproved == true)
         {
-        <div class="card">
-            <div class="basic-card basic-card-aqua">
-                <div class="card-content">
-                    <span class="card-title">@Html.DisplayFor(modelItem => item.Category.CategoryName)</span>
-                    <p class="card-text">
-                        @Html.Raw(item.Content)
-                    </p>
-                </div>
+        <div class="card" style="width: 320px;">
+             <img class="card-img-top" 
+                src="https://cms.greenwich.edu.vn/pluginfile.php/1/theme_adaptable/frontpagerendererdefaultimage/1640228920/edu-survey-landing-image.jpg" alt="">
 
-                <div class="card-link">
-                    <a asp-action="Details" asp-route-id="@item.Id" title="Read Full"><span>Read Full</span></a>
-                </div>
+            <div class="card-body">
+                <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
+                @*<p class="card-text para-mini">@Html.Raw(item.Content)</p>*@
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn--primary">See Details</a>
             </div>
-            
+            <div class="card-footer text-muted">
+                @if(item.Category.ParentCategory != null)
+                    {
+                         <a href="#" class="badge badge-primary">@Html.DisplayFor(modelItem => item.Category.ParentCategory.CategoryName)</a>
+                    }
+                <a asp-route-id="@item.CategoryId" asp-action="Details" asp-controller="Categories" asp-area="Dashboard" class="badge badge-secondary">@Html.DisplayFor(modelItem => item.Category.CategoryName)</a>   
+                <a href="#" class="badge badge-success">@Html.DisplayFor(modelItem => item.SpecialTag.SpecialTagName)</a>
+            </div>
         </div>
         }
     }
-</section>
+
+    <partial name="_Paging" model="@ViewBag.pagerModel"  />
+</div>

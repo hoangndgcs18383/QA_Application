@@ -11,6 +11,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - QA_Application</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="~/css/main.css" asp-append-version="true" />
@@ -47,13 +48,19 @@
 
                 <ul class="menu-links">
                     <li class="nav-link">
-                        <a asp-area="Dashboard" asp-controller="Ideas" asp-action="Index">
-                          <i class='bx bxs-dashboard icon' ></i>
-                            <span class="text nav-text">Post</span>
+                        <a asp-controller="Home" asp-action="Index">
+                          <i class='bx bx-home icon'></i>
+                            <span class="text nav-text">Home</span>
                         </a>
                     </li>
                     @if(userRole == "Admin")
                     {
+                        <li class="nav-link">
+                            <a asp-area="Dashboard" asp-controller="Ideas" asp-action="Index">
+                              <i class='bx bxs-dashboard icon' ></i>
+                                <span class="text nav-text">Post</span>
+                            </a>
+                        </li>
                         <li class="nav-link">
                             <a  asp-area="Manager" asp-controller="User" asp-action="Index">
                                 <i class='bx bxs-user-account icon' ></i>
@@ -92,6 +99,12 @@
 
                     @if(userRole == "Manager" || userRole == "User")
                     {
+                        <li class="nav-link">
+                            <a asp-area="Dashboard" asp-controller="Ideas" asp-action="GetPost">
+                              <i class='bx bxs-dashboard icon' ></i>
+                                <span class="text nav-text">Post</span>
+                            </a>
+                        </li>
                         <li class="nav-link">
                             <a href="#">
                                 <i class='bx bx-wallet icon' ></i>

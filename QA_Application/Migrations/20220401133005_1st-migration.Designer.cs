@@ -9,11 +9,11 @@ using QA_Application.Data;
 
 #nullable disable
 
-namespace QA_Application.Data.Migrations
+namespace QA_Application.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220331173059_FileToIdeas")]
-    partial class FileToIdeas
+    [Migration("20220401133005_1st-migration")]
+    partial class _1stmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

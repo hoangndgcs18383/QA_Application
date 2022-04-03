@@ -3,19 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QA_Application.Data;
 
 #nullable disable
 
-namespace QA_Application.Data.Migrations
+namespace QA_Application.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220326110936_updateCategory")]
-    partial class updateCategory
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -240,13 +238,27 @@ namespace QA_Application.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("FinalDeadline")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("FirstDeadline")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("IdeaId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ParentCategoryId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("IdeaId");
+
+                    b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Categories");
                 });
@@ -290,6 +302,10 @@ namespace QA_Application.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -300,6 +316,12 @@ namespace QA_Application.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("FileSubmit")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastUpdateDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("SpecialTagId")
                         .HasColumnType("int");
 
@@ -307,13 +329,15 @@ namespace QA_Application.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isApproved")
+                    b.Property<bool?>("isApproved")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("isLocked")
+                    b.Property<bool?>("isLocked")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("CategoryId");
 
@@ -330,7 +354,7 @@ namespace QA_Application.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Name")
+                    b.Property<string>("SpecialTagName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -405,6 +429,21 @@ namespace QA_Application.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("QA_Application.Models.Category", b =>
+                {
+                    b.HasOne("QA_Application.Models.Idea", "Idea")
+                        .WithMany()
+                        .HasForeignKey("IdeaId");
+
+                    b.HasOne("QA_Application.Models.Category", "ParentCategory")
+                        .WithMany("CategoryChildren")
+                        .HasForeignKey("ParentCategoryId");
+
+                    b.Navigation("Idea");
+
+                    b.Navigation("ParentCategory");
+                });
+
             modelBuilder.Entity("QA_Application.Models.Comment", b =>
                 {
                     b.HasOne("QA_Application.Models.ApplicationUser", "Author")
@@ -422,6 +461,12 @@ namespace QA_Application.Data.Migrations
 
             modelBuilder.Entity("QA_Application.Models.Idea", b =>
                 {
+                    b.HasOne("QA_Application.Models.ApplicationUser", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("QA_Application.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
@@ -434,9 +479,16 @@ namespace QA_Application.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Author");
+
                     b.Navigation("Category");
 
                     b.Navigation("SpecialTag");
+                });
+
+            modelBuilder.Entity("QA_Application.Models.Category", b =>
+                {
+                    b.Navigation("CategoryChildren");
                 });
 
             modelBuilder.Entity("QA_Application.Models.Idea", b =>

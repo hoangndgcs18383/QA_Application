@@ -899,6 +899,7 @@ body.dark {
     .sidebar.close {
         width: 88px;
         max-height: 100%;
+        opacity: 1!important;
     }
 
     /* ===== Reusable code - Here ===== */
@@ -908,6 +909,7 @@ body.dark {
         display: flex;
         align-items: center;
         margin-top: 10px;
+        padding: 0;
     }
 
     .sidebar header .image,
@@ -1164,6 +1166,7 @@ body.dark .switch::before {
     left: 78px;
     height: 100%;
     width: calc(100% - 78px);
+    display: inline-table;
 }
 
 body.dark .home .text {
@@ -1275,27 +1278,13 @@ body.dark .home .text {
     display: grid;
     justify-content: center;
     align-items: center;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 4rem;
     padding: 4rem;
     margin: 0 auto;
     width: max-content;
 }
 
-.card {
-    font-family: sans-serif;
-    margin-bottom: 45px;
-    text-align: center;
-}
-
-    .card div {
-        display: inline-block;
-    }
-
-    .card > div {
-        margin: 10px 5px;
-        text-align: left;
-    }
 
 /* Basic Card */
 .basic-card {
@@ -1306,6 +1295,13 @@ body.dark .home .text {
     -o-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
     box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
 }
+
+/*.card:hover {
+    background-color: #3a454b !important;
+    -webkit-transition: all .5s ease-in-out;
+    -o-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
+}*/
 
     .basic-card .card-content {
         padding: 30px;
@@ -1518,6 +1514,9 @@ a {
 }
 
 
+.post__content.content{
+    padding: 12px;
+}
 
 .content__image {
     width: 100%;
@@ -1809,10 +1808,23 @@ a {
     display: flex;
     flex-direction: column;
     position: relative;
-    margin-right: 0.5rem;
+    margin-left: 0.5rem;
     padding: 0.8rem 1.2rem;
     background: var(--primary-color-light);
     border-radius: 1.5rem;
+    max-width: max-content;
+    min-width
+}
+
+.commets__friend-comment{
+    display: flex;
+    padding: 8px;
+}
+
+.friend-comment__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
 }
 
 .comment__auth {
@@ -1829,6 +1841,7 @@ a {
     font-size: 1.5rem;
     font-weight: 400;
     color: var(--black2);
+    line-break: anywhere;
 }
 
 .comment__reactions {
@@ -2279,7 +2292,7 @@ body {
 }
 
 .delete__header {
-    color: var(--primary-color);
+    color: var(--danger);
     font-size: 1.5rem;
     margin-top: 16px
 }

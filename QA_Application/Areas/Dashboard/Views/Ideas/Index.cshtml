@@ -19,6 +19,7 @@
 <table id="table" class="table table-hover table-mc-light-blue">
     <thead>
     <tr>
+        <th>No</th>
         <th>Title</th>
         <th>CreatedDate</th>
         <th>isLocked</th>
@@ -32,8 +33,9 @@
 @foreach (var item in Model)
 {
         <tr>
-                @if(item.isApproved == null)
+                @if(item.isApproved == null && User.Identity!.Name == item.Author.UserName)
                 {
+                    <td data-title="No">@(++ViewBag.ideaIndex)</td>
                     <td data-title="ID">
                     <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
                     </td>
@@ -65,8 +67,10 @@
                         }
                     }
                 }
+
                 @if(item.isApproved == false && User.Identity!.Name == item.Author.UserName)
                 {
+                    <td data-title="No">@(++ViewBag.ideaIndex)</td>
                     <td data-title="ID">
                     <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
                     </td>
@@ -104,6 +108,8 @@
 }
     </tbody>
 </table>
+
+<partial name="_Paging" model="@ViewBag.pagerModel"  />
 
 
 
