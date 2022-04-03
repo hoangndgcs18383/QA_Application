@@ -6,11 +6,15 @@ main project_Q6
 -- Assign role to user
 -- Add session
 
-## Update new 1/4/2020
+## Update new 1/4/2022
 
 -- Add new library: elfinder, summernote
 -- Complete => approve, delcine function for admin, add first deadline, final deadline to category
 -- ...
+
+## Update new 1/4/2022
+-- Paging
+-- Layout FE
 
 ## Not yet done
 
