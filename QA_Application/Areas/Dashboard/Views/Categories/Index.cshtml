@@ -5,42 +5,55 @@
 }
 
 
-<div class="text">Cetegory</div>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">List Category</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>Categoty Name</th>
+                    <th>Description</th>
+                    <th>Closure Date</th>
+                    <th>Final Closure Date</th>
+                    <th>Status</th>
+                    <th>Link</th>
 
-
-<div class="auth-form__controls mr-8 mb-8 left">
-    <span class="total__item">Total categories: @ViewBag.Categories</span>
-</div>
-
-<div class="auth-form__controls mr-8 mb-8 right">
-    <a asp-action="Create" id="login-submit" class="btn btn--primary">Create New</a>
-</div>
-
-
-<table id="table" class="table table-hover table-mc-light-blue">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>First Deadline</th>
-        <th>Final Deadline</th>
-        <th>Status</th>
-        <th>Link</th>
-
-    </tr>
-    </thead>
-    <tbody>
+                </tr>
+                </thead>
+                <tbody>
 @foreach (var item in Model)
 {
-            await RenderCategory(item, 0);
-        }
-    </tbody>
-</table>
+    var predix = "department";
+    var deleteAction = "Delete";
+
+    var delete = new ActionPopup {
+    Id = @item.Id,
+    Title = @item.CategoryName,
+    Predix = predix,
+    Name = deleteAction,
+    Action = deleteAction,
+    Labell = "labelledbyDelete"
+};
+
+    <partial name="_ActionPopup" model="delete"></partial>
+
+    await RenderCategory(item, 0);
+}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 @{
     async Task RenderCategory(Category item, int level)
     {
         string prefix = String.Concat(Enumerable.Repeat("*", level));
+        var predix = "department";
+        var deleteAction = "Delete";
 
         <tr>
             <td data-title="Name">
@@ -54,7 +67,9 @@
             <td data-title="FinalDeadline">@Html.DisplayFor(modelItem => item.FinalDeadline)</td>
             @if(item.FinalDeadline > DateTime.Now)
             {
-                <td data-title="Status">On</td>
+                <td class="center_item" data-title="Status">
+                    <i class='bx bxs-circle icon_active'></i>
+                    Active</td>
             }
             else
             {
@@ -62,7 +77,7 @@
             }
             <td data-title="Link">
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a href="#" data-toggle="modal" data-target="#@predix@item.Id@deleteAction">Delete</a>
             </td>
         </tr>
         if(item.CategoryChildren?.Count > 0)
@@ -74,6 +89,8 @@
         }
     }
 }
+
+
 
 @section Scripts {
     <partial name="~/Views/Shared/_AlertifyPartial.cshtml"/>

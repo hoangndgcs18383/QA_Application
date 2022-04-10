@@ -2,37 +2,30 @@
     ViewData["Title"] = "Edit";
 }
 
-<div class="text">Update Role</div>
-
-
- <div class="modal">
-        <div class="modal__overlay">
-
-        </div>
-
-<div class="modal__body">
-
-        <form asp-action="Edit" method="post" enctype="multipart/form-data" class="auth-form">
-            <div class="auth-form__container">
-                <h3>@ViewBag.message</h3>
-                <div class="auth-form__group">
-                    <input type="hidden" value="@ViewBag.id" name="id" />
-                    <div class="group">
-                        <input id="name" name="name" type="text" value="@ViewBag.name" class="group__input mt-16" placeholder="Role Name" required>
-                    </div>
-                </div>
-    
-                <div class="auth-form__aside mt-16">
-                    <div class="auth-form__help">
-                        <a asp-action="Index" class="auth-form__link auth-form__forgot">Back to list</a>
-                    </div>
-                </div>
-    
-                <div class="auth-form__controls mb-8">
-                    <button type="submit" class="btn btn--primary">Update</button>
-                </div>
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="p-5">
+            <div class="text-center">
+                <h1 class="h4 text-gray-900 mb-4">Create Role</h1>
             </div>
-        </form>
+            <form asp-action="Edit" method="post" enctype="multipart/form-data" class="user">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <h3>@ViewBag.message</h3>
+
+               <div class="form-group">
+                    <input id="name" name="name" value="@ViewBag.name" type="text" class="form-control form-control-user"
+                        id="rolename" placeholder="Enter Role Name..." required>
+                </div>
+
+                <button type="submit" class="btn btn-success btn-icon-split btn-block">
+                    <span class="text">Submit</span>
+                </button>
+            </form>
+            <hr>
+             <a asp-action="Index" class="btn btn-secondary btn-icon-split btn-block">
+                <span class="text">Back</span>
+             </a>
+        </div>
     </div>
 </div>
 

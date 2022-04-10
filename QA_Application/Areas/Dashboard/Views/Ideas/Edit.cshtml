@@ -5,66 +5,65 @@
     var summernote = new QA_Application.Models.Summernote("#content_idea");
 }
 
-<div class="text">Edit Idea > @Model.Title</div>
-
-
- <div class="modal">
-        <div class="modal__overlay">
-
-        </div>
-
-<div class="modal__body">
-
-        <form asp-action="Edit" method="post" enctype="multipart/form-data" class="auth-form">
-            <div class="auth-form__container">
-                <div class="auth-form__group">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <h3>@ViewBag.error</h3>
-                    <input type="hidden" asp-for="Id" />
-                    <div class="group">
-                        <label asp-for="Title"></label>
-                        <input asp-for="Title" type="text" class="group__input" placeholder="Title" >
-                        <span asp-validation-for="Title" class="text-danger"></span>
-                    </div>
-        
-                    <div class="group">
-                        <label asp-for="Content"></label>
-                        <textarea id="content_idea" asp-for="Content" class="group__input" placeholder="Content" ></textarea>   
-                        <span asp-validation-for="Content" class="text-danger"></span>
-                    </div>
-
-                    <div class="group">
-                        <label asp-for="FileSubmit"></label>
-                        <input asp-for="FileSubmit" type="file" class="group__input" name="fileSubmit" accept=".pdf" />
-                        <span asp-validation-for="FileSubmit" class="text-danger"></span>
-                    </div>
-
-                    <div class="group">
-                        <label asp-for="CategoryId"></label>
-                        <select asp-for="CategoryId" asp-items="@ViewBag.CategoryId" class="group__input"></select>
-                        <span asp-validation-for="CategoryId" class="text-danger"></span>
-                    </div>
-                    <div class="group">
-                        <label asp-for="SpecialTagId"></label>
-                        <select asp-for="SpecialTagId" asp-items="@ViewBag.SpecialTagId" class="group__input"></select>
-                        <span asp-validation-for="SpecialTagId" class="text-danger"></span>
-                    </div>
-                </div>
-    
-                <div class="auth-form__aside mt-16">
-                    <div class="auth-form__help">
-                        <a asp-action="Index" class="auth-form__link auth-form__forgot">Back to list</a>
-                    </div>
-                </div>
-    
-                <div class="auth-form__controls mb-8">
-                    <button type="submit" class="btn btn--primary">Submit</button>
-                </div>
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="p-5">
+            <div class="text-center">
+                <h1 class="h4 text-gray-900 mb-4">Edit Idea</h1>
             </div>
-        </form>
-    </div>
-</div>
+            <form asp-action="Edit" method="post" enctype="multipart/form-data" class="user">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <h3>@ViewBag.error</h3>
+                <div class="form-group">
+                    <label asp-for="DepartmentId"></label>
+                    <select asp-for="DepartmentId" asp-items="@ViewBag.DepartmentId" class="form-control"></select>
+                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                </div>
 
+                <div class="form-group">
+                    <label asp-for="CategoryId"></label>
+                    <select asp-for="CategoryId" asp-items="@ViewBag.CategoryId" class="form-control"></select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="SpecialTagId"></label>
+                    <select asp-for="SpecialTagId" asp-items="@ViewBag.SpecialTagId" class="form-control"></select>
+                    <span asp-validation-for="SpecialTagId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Title"></label>
+                    <input  asp-for="Title" readonly="readonly" type="text" class="form-control form-control-user"
+                        id="title" placeholder="Enter Title...">
+                     <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                     <label asp-for="Content"></label>
+                    <textarea asp-for="Content" type="password" class="form-control form-control-user"
+                        id="content_idea" placeholder="Content"></textarea>
+                     <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="FileSubmit"></label>
+                    <input  asp-for="FileSubmit" type="file" class="form-control" id="title" accept="application/pdf">
+                    <span asp-validation-for="FileSubmit" class="text-danger"></span>
+                </div>
+
+             <button type="submit" class="btn btn-success btn-icon-split btn-block">
+                <span class="text">Submit</span>
+             </button>
+            </form>
+            <hr>
+
+             <a asp-action="GetPost" class="btn btn-secondary btn-icon-split btn-block">
+                <span class="text">Back</span>
+             </a>
+        </div>
+    </div>
+</div>>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -5,27 +5,62 @@
 }
 
 
-<div class="text">Account Manager</div>
-
-<div class="auth-form__controls mr-8 mb-8 right">
-    <a asp-action="Create" id="login-submit" class="btn btn--primary">Create New</a>
-</div>
-
-<table id="table" class="table table-hover table-mc-light-blue">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>User Name</th>
-        <th>Status</th>
-        <th>Link</th>
-
-    </tr>
-    </thead>
-    <tbody>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">List Account</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>UserName</th>
+                    <th>Link</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
 @foreach (var item in Model)
 {
+    var predix = "user";
+    var deleteAction = "Delete";
+    var lockoutAction = "Lockout";
+    var activeAction = "Active";
+
+;   var delete = new ActionPopupUR {
+    Id = @item.Id,
+    Title = @item.UserName,
+    Predix = predix,
+    Name = deleteAction,
+    Action = deleteAction,
+    Labell = "labelledbyDelete"
+};
+    var lockout = new ActionPopupUR {
+    Id = @item.Id,
+    Title = @item.UserName,
+    Predix = predix,
+    Name = lockoutAction,
+    Action = lockoutAction,
+    Labell = "labelledbyLockout"
+};
+
+    var active = new ActionPopupUR {
+    Id = @item.Id,
+    Title = @item.UserName,
+    Predix = predix,
+    Name = activeAction,
+    Action = activeAction,
+    Labell = "labelledbyActive"
+};
+
+
+    <partial name="_ActionPopupUR" model="delete"></partial>
+    <partial name="_ActionPopupUR" model="lockout"></partial>
+    <partial name="_ActionPopupUR" model="active"></partial>
+
     <tr>
         <td data-title="ID">@Html.DisplayFor(modelItem => item.Id)</td>
         <td data-title="FirstName">@Html.DisplayFor(modelItem => item.FirstName)</td>
@@ -35,8 +70,8 @@
         {
             <td>Inactive</td>
             <td data-title="Link">
-                <a asp-action="Active" asp-route-id="@item.Id">Active</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a href="#" data-toggle="modal" data-target="#@predix@item.Id@activeAction">Active</a> |
+                <a href="#" data-toggle="modal" data-target="#@predix@item.Id@deleteAction">Delete</a>
             </td>
         }
         else
@@ -44,14 +79,17 @@
             <td>Active</td>
             <td data-title="Link">
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Lockout" asp-route-id="@item.Id">Lockout</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a href="#" data-toggle="modal" data-target="#@predix@item.Id@lockoutAction">Lockout</a> |
+                <a href="#" data-toggle="modal" data-target="#@predix@item.Id@deleteAction">Delete</a>
             </td>
         }
     </tr>   
 }
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 @section scripts {
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>

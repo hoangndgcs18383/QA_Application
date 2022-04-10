@@ -1,0 +1,15 @@
+﻿@model ThumbViewModel
+
+<form class="form-inline offset-md-2" asp-action="ThumbUp" asp-route-id="@Model.IdeaId" method="post">
+    <button name="like" type="submit" class="btn btn-primary">
+        <i class="fas fa-thumbs-o-up"></i>
+        Like 
+    </button>
+</form>
+
+<form class="form-inline offset-md-1" asp-action="ThumbDown" asp-route-id="@Model.IdeaId" method="post">
+<button disabled name="dislike" type="submit" class="btn btn-primary">
+    <i class="fas fa-thumbs-o-up" aria-hidden="true"></i>
+    Dislike
+</button>
+</form>

@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewData["Title"] = Model.Title;
+    List<Category> categories = ViewBag.categories;
+
+}
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Home</a></li>
+    <li class="breadcrumb-item"><a asp-controller="ViewPost" 
+        asp-action="Index" asp-route-slug="">Blog</a></li>
+    
+  </ol>
+</nav>
+
+<div class="detailpost">
+    <h1>@Model.Title</h1>
+    <div class="sapo">@Model.Description</div>
+    @Html.Raw(Model.Content)
+</div>
+

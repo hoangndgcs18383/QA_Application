@@ -15,6 +15,7 @@ namespace QA_Application.Models
         public string? FileSubmit { get; set; }
         [Required]
         [Display(Name = "Create At")]
+        public long CountThumb { get; set; } = 0;
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime? LastUpdateDate { get; set; }
         public bool? isApproved { get; set; }
@@ -34,7 +35,13 @@ namespace QA_Application.Models
         public string AuthorId { get; set; }
         [ForeignKey("AuthorId")]
         public ApplicationUser Author { get; set; }
+        [Required]
+        [Display(Name = "Department")]
+        public int DepartmentId { get; set; }
+        [ForeignKey("DepartmentId")]
+        public Department Department { get; set; }
         public virtual List<Comment> Comments { get; set; }
+        public virtual List<Thumb> Thumbs { get; set; }
 
     }
 }

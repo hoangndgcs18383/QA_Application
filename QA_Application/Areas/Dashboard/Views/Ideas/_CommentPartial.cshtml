@@ -1,20 +1,23 @@
 ﻿@model CommentViewModel
 
-<!-- Comments -->
-<form asp-action="AddComment" method="post">
-    <input asp-for="IdeaId" type="hidden" name"ideas" />
-    <input asp-for="CommentId" type="hidden" name"comments" />
 
-    <div class="footer__comments comments">
-        <div class="comments__filter filter">Most Relevant
-            <i class="filter__icon"></i>
-        </div>
-        <!-- Comments box -->
-        <div class="comments__box box">
-            <div class="box__bar bar">
-                <input asp-for="Message" type="text" placeholder="Write a commnet..." class="bar__input">
-            </div>
-            
-        </div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+            <hr>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">Your answer</div>
+            <form asp-action="AddComment" method="post" enctype="multipart/form-data" class="user">
+                <input asp-for="IdeaId" type="hidden" name"ideas" />
+                <input asp-for="CommentId" type="hidden" name"comments" />
+                <div class="form-group">
+                    <input  asp-for="Message" type="text" class="form-control form-control-user"
+                        id="tags" placeholder="Write a comment...">
+                </div>
+
+@*                 <button type="submit" class="btn btn-success btn-icon-split btn-block">
+                    <span class="text">Submit</span>
+                 </button>*@
+            </form>
+            <hr>
     </div>
-</form>
+</div>

@@ -12,10 +12,10 @@ namespace QA_Application.Models
         public string CategoryName { get; set; }
         public string Description { get; set; }
         [Required]
-        [Display(Name = "First Deadline")]
+        [Display(Name = "Closesure date")]
         public DateTime FirstDeadline { get; set; }
         [Required]
-        [Display(Name = "Final Deadline")]
+        [Display(Name = "Final closesure date")]
         public DateTime FinalDeadline { get; set; }
         [Display(Name = "Parent Category")]
         public int? ParentCategoryId { get; set; }

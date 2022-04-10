@@ -14,11 +14,13 @@
     </tr>
     </thead>
     <tbody>
+
+
 @foreach (var item in ViewBag.UserRoles)
 {
     <tr>
-        <td data-title="UserName">@item.UserName</td>
-        <td data-title="RoleName">@item.RoleName</td>
+        <td data-title="UserName">@item.UserId</td>
+        <td data-title="RoleName">@item.RoleId</td>
     </tr>   
 }
     </tbody>

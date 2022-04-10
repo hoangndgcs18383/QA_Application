@@ -10,7 +10,7 @@ using System.ComponentModel;
 namespace QA_Application.Areas.Manager.Controllers
 {
     [Area("Manager")]
-    [Authorize(Roles = ("Admin"))]
+  
     public class RoleController : Controller
     {
         RoleManager<IdentityRole> _roleManager;
@@ -134,8 +134,6 @@ namespace QA_Application.Areas.Manager.Controllers
             var isCheckRoleAssign = await _userManager.IsInRoleAsync(user, userRoleViewModel.RoleId);
 
 
-            RoleNames = (await _userManager.GetRolesAsync(user)).ToArray();
-
             if (isCheckRoleAssign)
             {
                 ViewData["UserId"] = new SelectList(_context.ApplicationUsers
@@ -155,13 +153,8 @@ namespace QA_Application.Areas.Manager.Controllers
             return View();
         }
 
-        public ApplicationUser user { get; set; }
 
-        [BindProperty]
-        [DisplayName("Roles assign to user")]
-        public string[] RoleNames { get; set; }
-
-        public async Task<ActionResult> AssignUserRole()
+        public async Task<IActionResult> AssignUserRole()
         {
             var result = from ur in _context.UserRoles
                          join r in _context.Roles on ur.RoleId equals r.Id

@@ -1,0 +1,39 @@
+﻿@model QA_Application.Models.Department
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="p-5">
+            <div class="text-center">
+                <h1 class="h4 text-gray-900 mb-4">Edit Department</h1>
+            </div>
+            <form asp-action="Create" method="post" enctype="multipart/form-data" class="user">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <h3>@ViewBag.error</h3>
+                @*<input type="hidden" asp-for="Id" />*@
+                <div class="form-group">
+                    <label asp-for="DepartmentName"></label>
+                    <input  asp-for="DepartmentName" type="text" class="form-control form-control-user"
+                        id="tags" placeholder="Enter Name...">
+                     <span asp-validation-for="DepartmentName" class="text-danger"></span>
+                </div>
+
+                 <button type="submit" class="btn btn-success btn-icon-split btn-block">
+                    <span class="text">Submit</span>
+                 </button>
+            </form>
+            <hr>
+
+            <a asp-action="Index" class="btn btn-secondary btn-icon-split btn-block">
+                <span class="text">Back</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

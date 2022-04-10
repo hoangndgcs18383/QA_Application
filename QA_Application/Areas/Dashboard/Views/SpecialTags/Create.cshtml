@@ -4,38 +4,33 @@
     ViewData["Title"] = "Create";
 }
 
-<div class="text">Create Tag</div>
-
-
- <div class="modal">
-        <div class="modal__overlay">
-
-        </div>
-
-<div class="modal__body">
-
-        <form asp-action="Create" method="post" enctype="multipart/form-data" class="auth-form">
-            <div class="auth-form__container">
-                <div class="auth-form__group">
-                    <div class="group">
-                        <label asp-for="SpecialTagName"></label>
-                        @Html.EditorFor(m => m.SpecialTagName, new {htmlAttributes = new { @class = "group__input mt-16", @type = "text" ,@placeholder="Tag Name"} })
-                        <span asp-validation-for="SpecialTagName" class="text-danger"></span>
-                    </div>
-                </div>
-                
-
-                <div class="auth-form__aside mt-16">
-                    <div class="auth-form__help">
-                        <a asp-action="Index" class="auth-form__link auth-form__forgot">Back to list</a>
-                    </div>
-                </div>
-    
-                <div class="auth-form__controls mb-8">
-                    <button type="submit" class="btn btn--primary">Submit</button>
-                </div>
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="p-5">
+            <div class="text-center">
+                <h1 class="h4 text-gray-900 mb-4">Create Tags</h1>
             </div>
-        </form>
+            <form asp-action="Create" method="post" enctype="multipart/form-data" class="user">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <h3>@ViewBag.error</h3>
+                @*<input type="hidden" asp-for="Id" />*@
+                <div class="form-group">
+                    <label asp-for="SpecialTagName"></label>
+                    <input  asp-for="SpecialTagName" type="text" class="form-control form-control-user"
+                        id="tags" placeholder="Enter Name...">
+                     <span asp-validation-for="SpecialTagName" class="text-danger"></span>
+                </div>
+
+                 <button type="submit" class="btn btn-success btn-icon-split btn-block">
+                    <span class="text">Submit</span>
+                 </button>
+            </form>
+            <hr>
+
+            <a asp-action="Index" class="btn btn-secondary btn-icon-split btn-block">
+                <span class="text">Back</span>
+            </a>
+        </div>
     </div>
 </div>
 

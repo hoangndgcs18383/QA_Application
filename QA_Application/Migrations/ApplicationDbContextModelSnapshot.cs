@@ -294,6 +294,23 @@ namespace QA_Application.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("QA_Application.Models.Department", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("DepartmentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Department");
+                });
+
             modelBuilder.Entity("QA_Application.Models.Idea", b =>
                 {
                     b.Property<int>("Id")
@@ -313,8 +330,14 @@ namespace QA_Application.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("CountThumb")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
 
                     b.Property<string>("FileSubmit")
                         .HasColumnType("nvarchar(max)");
@@ -341,6 +364,8 @@ namespace QA_Application.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("DepartmentId");
+
                     b.HasIndex("SpecialTagId");
 
                     b.ToTable("Ideas");
@@ -361,6 +386,34 @@ namespace QA_Application.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SpecialTags");
+                });
+
+            modelBuilder.Entity("QA_Application.Models.Thumb", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("IdeaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("toggle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("IdeaId");
+
+                    b.ToTable("Thumbs");
                 });
 
             modelBuilder.Entity("QA_Application.Models.ApplicationUser", b =>
@@ -473,6 +526,12 @@ namespace QA_Application.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("QA_Application.Models.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("QA_Application.Models.SpecialTag", "SpecialTag")
                         .WithMany()
                         .HasForeignKey("SpecialTagId")
@@ -483,7 +542,24 @@ namespace QA_Application.Migrations
 
                     b.Navigation("Category");
 
+                    b.Navigation("Department");
+
                     b.Navigation("SpecialTag");
+                });
+
+            modelBuilder.Entity("QA_Application.Models.Thumb", b =>
+                {
+                    b.HasOne("QA_Application.Models.ApplicationUser", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QA_Application.Models.Idea", null)
+                        .WithMany("Thumbs")
+                        .HasForeignKey("IdeaId");
+
+                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("QA_Application.Models.Category", b =>
@@ -494,6 +570,8 @@ namespace QA_Application.Migrations
             modelBuilder.Entity("QA_Application.Models.Idea", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Thumbs");
                 });
 #pragma warning restore 612, 618
         }

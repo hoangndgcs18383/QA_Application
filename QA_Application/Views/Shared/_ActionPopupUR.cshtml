@@ -1,0 +1,33 @@
+﻿@model QA_Application.Models.ActionPopupUR
+
+@{
+    string id = Model.Id;
+    string title = Model.Title;
+    string predix = Model.Predix;
+    string name = Model.Name;
+    string action = Model.Action;
+    string labell = Model.Labell;
+}
+
+@{
+<div class="modal fade" id="@predix@id@action" tabindex="-1" role="dialog" aria-labelledby="@labell"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="@predix@id@action">Are you sure to @name this? <b>@title</b></h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select @name below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <form class="form-inline" asp-action=@action asp-route-id="@id" method="post">
+                    <button type="submit" class="btn btn-primary">@name</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+}

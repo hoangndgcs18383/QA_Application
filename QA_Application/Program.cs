@@ -1,6 +1,7 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Newtonsoft.Json.Serialization;
 using QA_Application.Data;
 using QA_Application.Models;
 using QA_Application.Services;
@@ -20,9 +21,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
 
 //Session
 builder.Services.AddDistributedMemoryCache();
@@ -115,35 +117,44 @@ app.UseEndpoints(endpoints =>
         areaName: "Manager",
         pattern: "Manager/{controller=Home}/{action=Index}/{id?}"
         );
+    endpoints.MapAreaControllerRoute(
+        name: "areas",
+        areaName: "Database",
+        pattern: "Database/{controller=Home}/{action=Index}/{id?}"
+        );
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
-    /*endpoints.MapGet("/TestMail", async (context) =>
+
+
+
+    endpoints.MapGet("/TestMail", async (context) =>
     {
-        var message = await MailUtils.SendMail("hoangndgcs18383@gmail.com", "hoangndgcs18383@gmail.com", "Test", "Xin chao");
+        var message = await QA_Application.Services.MailUtils.SendMail("hoangndgcs18383@gmail.com", "hoangndgcs18383@gmail.com", "Test", "Xin chao");
 
         await context.Response.WriteAsync(message);
     });
 
     endpoints.MapGet("/TestGmail", async (context) =>
     {
-        var message = await MailUtils.SendMailGoogleSmtp("hoangndgcs18383@gmail.com", "hoangndgcs18383@gmail.com", "Test", "Xin chao", "hoangndgcs18383@gmail.com", "Jiyeonpark");
+        var message = await QA_Application.Services.MailUtils.SendGmail("hoangndgcs18383@gmail.com", "hoangndgcs18383@gmail.com", "Test", "Xin chao", "hoangndgcs18383@gmail.com", "Jiyeonpark");
 
         await context.Response.WriteAsync(message);
-    });*/
+    });
 
-    endpoints.MapGet("/TestSendMailService", async (context) =>
-    {
-        var sendMailService = context.RequestServices.GetService<SendMailService>();
+    endpoints.MapGet("/TestGmailEE", async context => {
 
-        var mailContent = new MailContent();
+        // Lấy dịch vụ sendmailservice
+        var sendmailservice = context.RequestServices.GetService<SendMailService>();
 
-        mailContent.To = "hoangndgcs18383@gmail.com";
-        mailContent.Subject = "Kiem tra noi dung";
-        mailContent.Body = "Test";
-        
-        await sendMailService.SendMail(mailContent);
+        MailContent content = new MailContent
+        {
+            To = "xuanthulab.net@gmail.com",
+            Subject = "Kiểm tra thử",
+            Body = "<p><strong>Xin chào xuanthulab.net</strong></p>"
+        };
 
+        await sendmailservice.SendMail(content);
         await context.Response.WriteAsync("Send mail");
     });
 

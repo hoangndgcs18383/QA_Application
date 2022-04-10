@@ -1,122 +1,120 @@
-﻿@model QA_Application.Models.Idea
+﻿@using System.Security.Claims
+@model QA_Application.Models.Idea
 
 @{
     ViewData["Title"] = "Details";
     var firstDeadline = Model.Category.FirstDeadline;
     var finalDeadline = Model.Category.FinalDeadline;
     var now = DateTime.Now;
+    var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 }
 
-
-<div class="text">Detail Idea</div>
-
-
-
-<div class="post-wrapper">
-        <div class="post">
-
-            <div class="post__header header">
-                <div class="header__left">
-                    <a href="" class="">                        
-                    </a>
-                    <div class="post__auth author">
-                        <span class="author__name">
-                            @Html.DisplayFor(model => model.Title)
-                        </span>
-                        <i class="author__verified"></i>
-                    </div>
-                    <span class="post__date">
-                        @ViewBag.time
-                        <i class='bx bx-time'></i>
-                    </span>
-                    <span class="post__date-privacy-saparator">&nbsp;.</span>
-                    <i class="post__privacy"></i>
-                </div>
-
-                <div class="header__right">
-                    <div class="post__options options">
-                        <i class="options__icon"></i>
-                    </div>
-                </div>
+<div class="modal fade" id="deleteModelInPost" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModelLabel">Are you sure to delete this? <b>@Model.Title</b></h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
             </div>
-
-            <div class="post__content content">
-                <span class="content__paragraph">
-                   @Html.Raw(Model.Content)
-                </span>
-
-                <br />
-                @if(Model.FileSubmit == "nothing.pdf"){
-
-                }
-                else {
-                    <span>Model.FileSubmit</span>
-                    <a asp-action="PDFViewer" target="_blank">New tab</a>
-                }
+            <div class="modal-body">Select "Delete" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <form class="form-inline" asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                    <button type="submit" class="btn btn-primary">Delete</button>
+                </form>
             </div>
-
-            <div class="post__footer footer">
-                 <!-- Reactions -->
-                <div class="footer__reactions reactions">
-                    <div class="reactions__emojis emojis">
-                        <span class="emojis__count">
-                            <a href="">193k</a>
-                        </span>
-                    </div>
-
-                    <div class="reactions__comments-shares">
-                        <span class="comments-shares__comments">
-                            <a href="">@ViewBag.comments comments</a>
-                        </span>
-
-                    </div>
-                </div>
-                @if(firstDeadline > now)
-                {
-                <!-- Buttons -->
-                <div class="footer__buttons buttons">
-                    <a class="buttons__like like">
-                        <i class='bx bx-like'></i>
-                    </a>
-                    <a class="buttons__comment commnet">
-                        <i class='bx bx-dislike' ></i>
-                    </a>
-                    <a asp-action="Edit" asp-route-id="@Model?.Id" class="buttons__share share">Edit
-                        <i class="share__icon"></i>
-                    </a>
-                    <a asp-action="Delete" asp-route-id="@Model?.Id" class="buttons__share share">Delete
-                        <i class="share__icon"></i>
-                    </a>
-                    <a asp-action="Index" class="buttons__share share">Back
-                        <i class="share__icon"></i>
-                    </a>
-                </div>                
-                }
-                @if(finalDeadline > now)
-                {
-
-                    await Html.RenderPartialAsync("_CommentPartial.cshtml", new CommentViewModel { IdeaId = Model.Id, CommentId = 0 });
-
-                    foreach(var c in Model.Comments)
-                    {
-                        if(c != null)
-                        {
-                            <!-- Friend comments -->
-                            <div class="commets__friend-comment friend-comment">
-                                <img src="https://banner2.cleanpng.com/20180411/wow/kisspng-smiley-emoticon-anonymous-zazzle-avatar-avatar-5acde37c8a8d22.0531790415234425565675.jpg" class="friend-comment__avatar"></img>
-                                <div class="friend-comment__comment comment">
-                                    <a href="" class="comment__auth">
-                                        @c.Author.UserName
-                                    </a>
-                                    <span class="comment__content">
-                                        Reply: @c.Message
-                                    </span>
-                                    </div>
-                            </div>
-                        }
-                    }
-                }
-                </div>
-
         </div>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+        <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div
+                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">User-@userId posted</h6>
+                    <br />
+                    <h6 class="m-0 font-weight-italic">asked @ViewBag.time</h6>
+            
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                        aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">Options:</div>
+                        <a asp-action="Edit" class="dropdown-item">Edit post</a>
+                        <a href="#" class="dropdown-item" data-toggle="modal" data-target="#deleteModelInPost">Delete</a>
+                        <div class="dropdown-divider"></div>
+                        <a asp-action="GetPost" class="dropdown-item">Back to Dashboard</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="h5 mb-0 font-weight-bold text-gray-800">@Html.DisplayFor(model => model.Title)</div>
+                @Html.Raw(Model.Content)
+
+                @if(Model.Category.ParentCategory != null)
+                    {
+                         <a href="#" class="badge badge-primary">@Html.DisplayFor(modelItem => modelItem.Category.ParentCategory.CategoryName)</a>
+                    }
+                <a asp-route-id="CategoryId" asp-action="Details" asp-controller="Categories"
+                    class="badge badge-secondary">@Html.DisplayFor(modelItem => modelItem.Category.CategoryName)</a>
+                    
+                <a href="#" class="badge badge-success">@Html.DisplayFor(modelItem => modelItem.SpecialTag.SpecialTagName)</a>
+
+                <hr>
+
+                <div class ="form-inline">
+                    @if(ViewBag.count > 0){
+                        <div class="h5 mb-0 font-weight-bold text-gray-800 offset-md-2">
+                            <i class="fas fa-thumbs-o-up"></i>
+                            @ViewBag.count
+                        </div>
+                    }
+                    else{
+                        <div class="h5 mb-0 font-weight-bold offset-md-2 text-gray-800">
+                            <i class="fas fa-thumbs-o-down"></i>
+                            @ViewBag.count
+                        </div>
+                    }
+
+                    @{
+                        await Html.RenderPartialAsync("_ThumbPartial", new ThumbViewModel { IdeaId = Model.Id, ThumbId = 0 , AuthorId = userId});
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+@{
+    await Html.RenderPartialAsync("_CommentPartial", new CommentViewModel { IdeaId = Model.Id, CommentId = 0 });
+}
+
+@foreach(var c in Model.Comments)
+{
+    if(c != null)
+    {
+        <div class="col-lg-6">
+
+        <!-- Default Card Example -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-comments fa-2x text-gray-300"></i>
+                answer by @userId
+            </div>
+            <div class="card-body">
+                Reply: @c.Message
+            </div>
+        </div>
+    </div>
+    <form asp-action="RemoveComment" method="post" asp-route-id="@c.Id" onsubmit="return jQueryAjaxDelete(this);">
+                <input type="submit" value="Delete" class="btn btn--primary" />
+    </form>
+    }
+}
 </div>

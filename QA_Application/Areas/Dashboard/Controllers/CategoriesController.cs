@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using QA_Application.Models;
 namespace QA_Application.Areas.Dashboard.Controllers
 {
     [Area("Dashboard")]
+    /*[Authorize(Roles = ("Admin, Manager"))]*/
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -85,21 +87,19 @@ namespace QA_Application.Areas.Dashboard.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CategoryName,Description,FirstDeadline,FinalDeadline,ParentCategoryId,IdeaId")] Category category)
+        public async Task<IActionResult> Create([Bind("CategoryName,Description,FirstDeadline,FinalDeadline,ParentCategoryId")] Category category)
         {
-            if (!ModelState.IsValid)
-            {
-                if (category.ParentCategoryId == -1) category.ParentCategoryId = null;
-                TempData["Success"] = "Category has been created successfully";
-                _context.Add(category);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
             var qr = (from c in _context.Categories select c)
-                            .Include(c => c.ParentCategory)
-                            .Include(c => c.CategoryChildren);
+                .Include(c => c.ParentCategory)
+                .Include(c => c.CategoryChildren);
 
             var categories = (await qr.ToListAsync()).Where(c => c.ParentCategory == null).ToList();
+
+            categories.Add( new Category()
+            {
+                Id = -1,
+                CategoryName = "No title"
+            });
 
             categories.Insert(0, new Category()
             {
@@ -111,6 +111,29 @@ namespace QA_Application.Areas.Dashboard.Controllers
             CreateSelectItem(categories, items, 0);
 
             var selectLists = new SelectList(items, "Id", "CategoryName");
+
+            if (!ModelState.IsValid)
+            {
+                var search = _context.Categories.FirstOrDefault(c => c.CategoryName == category.CategoryName);
+                if (search != null)
+                {
+                    ViewBag.error = "The Category Name has exits";
+                    ViewData["IdeaId"] = new SelectList(_context.Ideas, "Id", "Content", category.IdeaId);
+                    ViewData["ParentCategoryId"] = selectLists;
+                    return View(category);
+                }
+
+                if (category.ParentCategoryId == -1) category.ParentCategoryId = null;
+                /*if(category.FirstDeadline < category.ParentCategory.FirstDeadline)
+                {
+                    ViewBag.error = "First deadline should more than Parent";
+                    return View(category);
+                }*/
+                TempData["Success"] = "Category has been created successfully";
+                _context.Add(category);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
 
             ViewData["IdeaId"] = new SelectList(_context.Ideas, "Id", "Content", category.IdeaId);
             ViewData["ParentCategoryId"] = selectLists;
@@ -130,8 +153,27 @@ namespace QA_Application.Areas.Dashboard.Controllers
             {
                 return NotFound();
             }
+
+                        var qr = (from c in _context.Categories select c)
+                            .Include(c => c.ParentCategory)
+                            .Include(c => c.CategoryChildren);
+
+            var categories = (await qr.ToListAsync()).Where(c => c.ParentCategory == null).ToList();
+
+            categories.Insert(0, new Category()
+            {
+                Id = -1,
+                CategoryName = "No title"
+            });
+
+            var items = new List<Category>();
+            CreateSelectItem(categories, items, 0);
+
+            var selectLists = new SelectList(items, "Id", "CategoryName");
+
             ViewData["IdeaId"] = new SelectList(_context.Ideas, "Id", "Content", category.IdeaId);
-            ViewData["ParentCategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName", category.ParentCategoryId);
+            ViewData["ParentCategoryId"] = selectLists;
+
             return View(category);
         }
 
@@ -149,10 +191,15 @@ namespace QA_Application.Areas.Dashboard.Controllers
 
             if(category.ParentCategoryId == category.Id)
             {
-                ModelState.AddModelError(string.Empty, "You need to select other title");
+                ModelState.AddModelError(string.Empty, "Error!! You need to select other parent category");
             }
 
-            if (!ModelState.IsValid)
+            if(category.FirstDeadline < DateTime.Now)
+            {
+                ModelState.AddModelError(string.Empty, "Error!! You need to choose date greater than now");
+            }
+
+            if (!ModelState.IsValid && category.ParentCategoryId != category.Id)
             {
                 try
                 {
@@ -209,6 +256,27 @@ namespace QA_Application.Areas.Dashboard.Controllers
                 .Include(c => c.Idea)
                 .Include(c => c.ParentCategory)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            var qr = (from c in _context.Categories select c)
+                            .Include(c => c.ParentCategory)
+                            .Include(c => c.CategoryChildren);
+
+            var categories = (await qr.ToListAsync()).Where(c => c.ParentCategory == null).ToList();
+
+            categories.Insert(0, new Category()
+            {
+                Id = -1,
+                CategoryName = "No title"
+            });
+
+            var items = new List<Category>();
+            CreateSelectItem(categories, items, 0);
+
+            var selectLists = new SelectList(items, "Id", "CategoryName");
+
+            ViewData["IdeaId"] = new SelectList(_context.Ideas, "Id", "Content");
+            ViewData["ParentCategoryId"] = selectLists;
+
             if (category == null)
             {
                 return NotFound();
@@ -224,6 +292,7 @@ namespace QA_Application.Areas.Dashboard.Controllers
         {
             var category = await _context.Categories
                 .Include(c => c.CategoryChildren)
+                .Include(c => c.ParentCategory)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if(category == null)
@@ -251,8 +320,11 @@ namespace QA_Application.Areas.Dashboard.Controllers
             string prefix = string.Concat(Enumerable.Repeat("----", level));
             foreach (var category in source)
             {
-                category.CategoryName = prefix + " " + category.CategoryName;
-                des.Add(category);
+                //category.CategoryName = prefix + " " + category.CategoryName;
+                des.Add(new Category() { 
+                    Id = category.Id,
+                    CategoryName = prefix + " " + category.CategoryName
+                });;
                 if (category.CategoryChildren?.Count > 0)
                 {
                     CreateSelectItem(category.CategoryChildren.ToList(), des, level + 1);

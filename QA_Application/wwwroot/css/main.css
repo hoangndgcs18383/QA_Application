@@ -2302,3 +2302,14 @@ body {
     color: var(--black1);
     font-weight: 600;
 }
+
+.center_item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon_active{
+    color: springgreen;
+    margin-right: 2px;
+}

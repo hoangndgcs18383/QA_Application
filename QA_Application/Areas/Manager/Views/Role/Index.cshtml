@@ -3,39 +3,53 @@
 }
 
 
-<div class="text">Account Roles</div>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">List Roles</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>Role Name</th>
+                    <th>Link</th>
 
-<div class="auth-form__controls mr-8 mb-8 left">
-    <span class="total__item">Total roles: @ViewBag.cRoles</span>
-</div>
-
-<div class="auth-form__controls mr-8 mb-8 right">
-    <a asp-action="Create" class="btn btn--primary">Create New</a>
-    <a asp-action="Assign" class="btn btn--primary ml-12">Assign</a>
-</div>
-
-<table id="table" class="table table-hover table-mc-light-blue">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Link</th>
-
-    </tr>
-    </thead>
-    <tbody>
+                </tr>
+                </thead>
+                <tbody>
 @foreach (var item in ViewBag.Roles)
 {
+       var predix = "role";
+       var deleteAction = "Delete";
+
+
+       var delete = new ActionPopupUR {
+        Id = @item.Id,
+        Title = @item.Name,
+        Predix = predix,
+        Name = deleteAction,
+        Action = deleteAction,
+        Labell = "labelledbyDelete"
+       };
+
+    <partial name="_ActionPopupUR" model="delete"></partial>
+
     <tr>
         <td data-title="ID">@item.Name</td>
 
         <td data-title="Link">
             <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            <a href="#" data-toggle="modal" data-target="#@predix@item.Id@deleteAction">Delete</a>
         </td>
     </tr>   
 }
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 
 @section Scripts {
     <partial name="~/Views/Shared/_AlertifyPartial.cshtml"/>

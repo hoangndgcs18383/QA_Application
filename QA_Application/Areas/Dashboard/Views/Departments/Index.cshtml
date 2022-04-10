@@ -1,0 +1,55 @@
+﻿@model IEnumerable<QA_Application.Models.Department>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Department List</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Link</th>
+
+                </tr>
+                </thead>
+                <tbody>
+@foreach (var item in Model)
+{
+    var predix = "department";
+    var deleteAction = "Delete";
+
+    var delete = new ActionPopup {
+    Id = @item.Id,
+    Predix = predix,
+    Name = deleteAction,
+    Action = deleteAction,
+    Labell = "labelledbyDelete"
+};
+
+    <partial name="_ActionPopup" model="delete"></partial>
+
+                <tr>
+                    <td data-title="ID">@item.DepartmentName</td>
+                    <td data-title="Link">
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a href="#" data-toggle="modal" data-target="#@predix@item.Id@deleteAction">Delete</a>
+                    </td>
+                </tr>      
+}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="~/Views/Shared/_AlertifyPartial.cshtml"/>
+}

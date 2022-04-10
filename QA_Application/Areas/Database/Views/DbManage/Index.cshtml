@@ -1,0 +1,61 @@
+﻿@using Microsoft.EntityFrameworkCore
+@using System.Data
+@using QA_Application.Data
+
+@inject ApplicationDbContext context
+
+@{
+    ViewData["Title"] = "Infomation DB";
+    var connect = context.Database.GetDbConnection();
+    var DbName = connect.Database;
+    var canConnect = context.Database.CanConnect();
+
+    var getPedingMigrations = context.Database.GetPendingMigrations();
+    var appliedMigrations = context.Database.GetAppliedMigrations();
+}
+
+<h2>Infomation</h2>
+<p> - Database: @DbName</p>
+<p> - Source: @connect.DataSource</p>
+<p> - State: @connect.State</p>
+
+<h2>Migrations</h2>
+@foreach(var migration in appliedMigrations){
+    <p>@migration</p>
+}
+@foreach(var migration in getPedingMigrations){
+    <p>@migration (pending)</p>
+}
+
+@if(!canConnect){
+    <p class="alert alert-danger">Unload connection to Database..</p>
+}
+
+@if (getPedingMigrations.Any())
+{
+    <form method="post">
+        <buttom class="btn btn-success" asp-action="Migrate">Create Db(Migration)</buttom>
+    </form>
+
+}
+
+@if(canConnect){
+    <h2>Table</h2>
+    await context.Database.OpenConnectionAsync();
+    var table = context.Database.GetDbConnection().GetSchema("Tables");
+
+    var rows = table.Rows;
+
+    <ul>
+        @foreach(DataRow row in rows){
+            <li>@row["TABLE_NAME"]</li>
+        }
+    </ul>
+
+    <a asp-action="DeleteDb" class="btn btn-danger">Delete Database: @DbName</a>
+    <a asp-action="SeedData" class="btn btn-secondary">Seed Database: @DbName</a>
+}
+
+@section Scripts {
+    <partial name="~/Views/Shared/_AlertifyPartial.cshtml"/>
+}

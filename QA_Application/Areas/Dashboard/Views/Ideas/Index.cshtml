@@ -8,30 +8,77 @@
     var userRole = HttpContextAccesser.HttpContext.Session.GetString(key: "roleName");
 }
 
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">List Ideas</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Title</th>
+                    <th>CreatedDate</th>
+                    <th>isLocked</th>
+                    <th>Category</th>
+                    <th>Link</th>
+                    <th>Status</th>
 
-<div class="text">Index</div>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>No</th>
+                    <th>Title</th>
+                    <th>CreatedDate</th>
+                    <th>isLocked</th>
+                    <th>Category</th>
+                    <th>Link</th>
+                    <th>Status</th>
 
-<div class="auth-form__controls mr-8 mb-8 right">
-    <a asp-action="Create" id="login-submit" class="btn btn--primary mr-8">Create New</a>
-    <a asp-action="GetPost" id="login-submit" class="btn btn--primary">Post</a>
-</div>
-
-<table id="table" class="table table-hover table-mc-light-blue">
-    <thead>
-    <tr>
-        <th>No</th>
-        <th>Title</th>
-        <th>CreatedDate</th>
-        <th>isLocked</th>
-        <th>Category</th>
-        <th>Link</th>
-        <th>Status</th>
-
-    </tr>
-    </thead>
-    <tbody>
+                </tr>
+                </tfoot>
+                <tbody>
 @foreach (var item in Model)
 {
+        var predix = "idea";
+        var deleteAction = "Delete";
+        var approveAction = "Approve";
+        var declineAction = "Decline";
+
+        var decline = new ActionPopup {
+        Id = @item.Id,
+        Predix = predix,
+        Title = @item.Title,
+        Name = declineAction,
+        Action = declineAction,
+        Labell = "labelledbyDecline"
+        };
+
+        var approve = new ActionPopup {
+        Id = @item.Id,
+        Title = @item.Title,
+        Predix = predix,
+        Name = approveAction,
+        Action = approveAction,
+        Labell = "labelledbyApprove"
+        };
+
+
+        var delete = new ActionPopup {
+        Id = @item.Id,
+        Title = @item.Title,
+        Predix = predix,
+        Name = deleteAction,
+        Action = deleteAction,
+        Labell = "labelledbyDelete"
+        };
+
+        <partial name="_ActionPopup" model="approve"></partial>
+        <partial name="_ActionPopup" model="decline"></partial>
+        <partial name="_ActionPopup" model="delete"></partial>
+
         <tr>
                 @if(item.isApproved == null && User.Identity!.Name == item.Author.UserName)
                 {
@@ -44,9 +91,10 @@
                     <td data-title="ID">@item.Category.CategoryName</td>
                     @if(userRole == "Admin")
                     {
+                                                        
                         <td data-title="Link">
-                            <a asp-action="Approve" asp-route-id="@item.Id">Approve</a> |
-                            <a asp-action="Decline" asp-route-id="@item.Id">Decline</a>
+                            <a href="#" data-toggle="modal" data-target="#@predix@item.Id@approveAction">Approve</a> |
+                            <a href="#" data-toggle="modal" data-target="#@predix@item.Id@declineAction">Decline</a>
                         </td>
                         <td data-title="Status">Sending to approve...</td>
                     }
@@ -55,7 +103,7 @@
 
                         <td data-title="Link">
                             <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <a href="#" data-toggle="modal" data-target="#@predix@item.Id@deleteAction">Delete</a>
                         </td>
                         if(item.Category.FinalDeadline > DateTime.Now)
                         {
@@ -63,11 +111,11 @@
                         }
                         else
                         {
-                            <td data-title="Status">The ideas has been timeout to approve...</td>    
+                            <td data-title="Status">The ideas has been timeout to approve...</td>
                         }
                     }
                 }
-
+                @*Decline*@
                 @if(item.isApproved == false && User.Identity!.Name == item.Author.UserName)
                 {
                     <td data-title="No">@(++ViewBag.ideaIndex)</td>
@@ -80,19 +128,26 @@
                     @if(userRole == "Admin")
                     {
                         <td data-title="Link">
-                            <a asp-action="Approve" asp-route-id="@item.Id">Approve</a> |
-                            <a asp-action="Decline" asp-route-id="@item.Id">Decline</a> |
+                            <a href="#" data-toggle="modal" data-target="#@predix@item.Id@approveAction">Approve</a> |
+                            <a href="#" data-toggle="modal" data-target="#@predix@item.Id@declineAction">Decline</a> |
                             <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <a href="#" data-toggle="modal" data-target="#@predix@item.Id@deleteAction">Delete</a>
                         </td>
-                        <td data-title="Status">Sending to approve...</td>
+                        if(item.Category.FinalDeadline > DateTime.Now)
+                        {
+                            <td data-title="Status">The ideas has been declined</td>
+                        }
+                        else
+                        {
+                            <td data-title="Status">The ideas has been timeout to approve...</td>    
+                        }
                     }
                     else
                     {
 
                         <td data-title="Link">
                             <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <a href="#" data-toggle="modal" data-target="#@predix@item.Id@deleteAction">Delete</a>
                         </td>
                         if(item.Category.FinalDeadline > DateTime.Now)
                         {
@@ -106,11 +161,13 @@
                 }
         </tr>      
 }
-    </tbody>
-</table>
 
-<partial name="_Paging" model="@ViewBag.pagerModel"  />
-
+                </tbody>
+            </table>
+        </div>
+        <partial name="_Paging" model="@ViewBag.pagerModel"  />
+    </div>
+</div>
 
 
 @section Scripts {

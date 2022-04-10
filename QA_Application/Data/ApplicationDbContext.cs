@@ -16,5 +16,7 @@ namespace QA_Application.Data
         public DbSet<Idea> Ideas { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Department> Department { get; set; }
+        public DbSet<Thumb> Thumbs { get; set; }
     }
 }
