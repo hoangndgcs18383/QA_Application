@@ -4,7 +4,7 @@
 
 namespace QA_Application.Migrations
 {
-    public partial class update : Migration
+    public partial class update2nd : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,10 +14,6 @@ namespace QA_Application.Migrations
 
             migrationBuilder.DropColumn(
                 name: "Count",
-                table: "Thumbs");
-
-            migrationBuilder.DropColumn(
-                name: "isThumb",
                 table: "Thumbs");
 
             migrationBuilder.AlterColumn<int>(
@@ -43,12 +39,26 @@ namespace QA_Application.Migrations
                 nullable: false,
                 defaultValue: "");
 
-            migrationBuilder.AddColumn<long>(
+            migrationBuilder.AddColumn<int>(
                 name: "CountThumb",
                 table: "Ideas",
-                type: "bigint",
+                type: "int",
                 nullable: false,
-                defaultValue: 0L);
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<int>(
+                name: "CountThumbDown",
+                table: "Ideas",
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<int>(
+                name: "CountThumbUp",
+                table: "Ideas",
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Thumbs_AuthorId",
@@ -93,6 +103,14 @@ namespace QA_Application.Migrations
                 name: "CountThumb",
                 table: "Ideas");
 
+            migrationBuilder.DropColumn(
+                name: "CountThumbDown",
+                table: "Ideas");
+
+            migrationBuilder.DropColumn(
+                name: "CountThumbUp",
+                table: "Ideas");
+
             migrationBuilder.AlterColumn<int>(
                 name: "IdeaId",
                 table: "Thumbs",
@@ -117,13 +135,6 @@ namespace QA_Application.Migrations
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
-
-            migrationBuilder.AddColumn<bool>(
-                name: "isThumb",
-                table: "Thumbs",
-                type: "bit",
-                nullable: false,
-                defaultValue: false);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Thumbs_Ideas_IdeaId",

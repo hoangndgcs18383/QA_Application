@@ -8,6 +8,12 @@
     var userRole = HttpContextAccesser.HttpContext.Session.GetString(key: "roleName");
 }
 
+<nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index">Account</a></li>
+  </ol>
+</nav>
+
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">List Ideas</h6>
@@ -80,16 +86,16 @@
         <partial name="_ActionPopup" model="delete"></partial>
 
         <tr>
-                @if(item.isApproved == null && User.Identity!.Name == item.Author.UserName)
+                @if(item.isApproved == null)
                 {
                     <td data-title="No">@(++ViewBag.ideaIndex)</td>
                     <td data-title="ID">
-                    <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
+                    <a asp-action="Review" asp-route-id="@item.Id">@item.Title</a>
                     </td>
                     <td data-title="ID">@item.CreatedDate</td>
                     <td data-title="ID">@item.isLocked</td>
                     <td data-title="ID">@item.Category.CategoryName</td>
-                    @if(userRole == "Admin")
+                    @if(userRole == "Admin" || userRole == "Manager")
                     {
                                                         
                         <td data-title="Link">
@@ -116,7 +122,7 @@
                     }
                 }
                 @*Decline*@
-                @if(item.isApproved == false && User.Identity!.Name == item.Author.UserName)
+                @if(item.isApproved == false)
                 {
                     <td data-title="No">@(++ViewBag.ideaIndex)</td>
                     <td data-title="ID">
@@ -125,7 +131,7 @@
                     <td data-title="ID">@item.CreatedDate</td>
                     <td data-title="ID">@item.isLocked</td>
                     <td data-title="ID">@item.Category.CategoryName</td>
-                    @if(userRole == "Admin")
+                    @if(userRole == "Admin" || userRole == "Manager")
                     {
                         <td data-title="Link">
                             <a href="#" data-toggle="modal" data-target="#@predix@item.Id@approveAction">Approve</a> |

@@ -7,7 +7,7 @@ using QA_Application.Models;
 namespace QA_Application.Areas.Account.Controllers
 {
     [Area("Manager")]
-
+    [Authorize(Roles ="Admin")]
     public class UserController : Controller
     {
         UserManager<IdentityUser> _userManager;

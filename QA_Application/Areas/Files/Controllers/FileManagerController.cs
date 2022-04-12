@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace QA_Application.Areas.Files.Controllers
 {
     [Area("Files")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Manager")]
     public class FileManagerController : Controller
     {
         [Route("/file-manager")]
@@ -49,7 +49,7 @@ namespace QA_Application.Areas.Files.Controllers
             var uri = new Uri(absoluteUrl);
 
             // Uploads
-            string rootDirectory = Path.Combine(_env.ContentRootPath, pathroot);
+            string rootDirectory = Path.Combine(_env.WebRootPath, pathroot);
 
             // https://localhost:5001/files/
             string url = $"{uri.Scheme}://{uri.Authority}/{requestUrl}/";

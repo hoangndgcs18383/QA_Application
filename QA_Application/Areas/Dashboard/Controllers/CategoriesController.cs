@@ -13,7 +13,7 @@ using QA_Application.Models;
 namespace QA_Application.Areas.Dashboard.Controllers
 {
     [Area("Dashboard")]
-    /*[Authorize(Roles = ("Admin, Manager"))]*/
+    [Authorize(Roles = ("Admin, Manager"))]
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;

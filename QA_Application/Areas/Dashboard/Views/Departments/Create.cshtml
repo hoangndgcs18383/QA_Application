@@ -4,6 +4,13 @@
     ViewData["Title"] = "Create";
 }
 
+<nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index">Department</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Create</li>
+  </ol>
+</nav>
+
 <div class="row justify-content-center">
     <div class="col-lg-6">
         <div class="p-5">
@@ -17,7 +24,7 @@
                 <div class="form-group">
                     <label asp-for="DepartmentName"></label>
                     <input  asp-for="DepartmentName" type="text" class="form-control form-control-user"
-                        id="tags" placeholder="Enter Name...">
+                        id="tags" placeholder="Enter Name..." required>
                      <span asp-validation-for="DepartmentName" class="text-danger"></span>
                 </div>
 
@@ -27,9 +34,9 @@
             </form>
             <hr>
 
-             <button asp-action="GetPost" class="btn btn-success btn-icon-split btn-block">
+            <a asp-action="Index" class="btn btn-secondary btn-icon-split btn-block">
                 <span class="text">Back</span>
-             </button>
+            </a>
         </div>
     </div>
 </div>>

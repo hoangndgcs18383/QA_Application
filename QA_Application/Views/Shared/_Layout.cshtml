@@ -1,9 +1,15 @@
-﻿<!DOCTYPE html>
+﻿@inject IHttpContextAccessor HttpContextAccesser
+@{
+    var userRole = HttpContextAccesser.HttpContext.Session.GetString(key: "roleName");
+}
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - mvcblog</title>
+    <title>@ViewData["Title"] - QA Application</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
@@ -45,126 +51,15 @@
             <!-- Divider -->
             <hr class="sidebar-divider">
 
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                General
-            </div>
-
-            <!-- Nav Item - Post Ideas -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseIdeas"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Ideas</span>
-                </a>
-                <div id="collapseIdeas" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Post:</h6>
-                        <a asp-area="Dashboard" asp-controller="Ideas" asp-action="Create"  class="collapse-item active">Post</a>
-                        <a asp-area="Dashboard" asp-controller="Ideas" asp-action="Index"  class="collapse-item active">Approve</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Categories -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCategoies"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Categories</span>
-                </a>
-                <div id="collapseCategoies" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Category:</h6>
-                        <a asp-area="Dashboard" asp-controller="Categories" asp-action="Index" class="collapse-item active">List Category</a>
-                        <a asp-area="Dashboard" asp-controller="Categories" asp-action="Create" class="collapse-item active">Create</a>
-                    </div>
-                </div>
-            </li>
-            <!-- Nav Item - Tags -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTags"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-tags"></i>
-                    <span>Tags</span>
-                </a>
-                <div id="collapseTags" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Tag:</h6>
-                        <a asp-area="Dashboard" asp-controller="SpecialTags" asp-action="Index" class="collapse-item active">List Tag</a>
-                        <a asp-area="Dashboard" asp-controller="SpecialTags" asp-action="Create" class="collapse-item active">Create</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Department -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDepartments"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-building"></i>
-                    <span>Departments</span>
-                </a>
-                <div id="collapseDepartments" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Tag:</h6>
-                        <a asp-area="Dashboard" asp-controller="Departments" asp-action="Index" class="collapse-item active">List Department</a>
-                        <a asp-area="Dashboard" asp-controller="Departments" asp-action="Create" class="collapse-item active">Create</a>
-                    </div>
-                </div>
-            </li>
+            <partial name="GenaralNav"></partial>
 
             <!-- Divider -->
-            <hr class="sidebar-divider">
+            @if(userRole == "Admin" || userRole == "Manager")
+            {
+                 <partial name="ManageNav"></partial>
+            }
 
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Manage
-            </div>
-
-            <!-- Nav Item - Account -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAccounts" aria-expanded="true"
-                    aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>Accounts</span>
-                </a>
-                <div id="collapseAccounts" class="collapse" aria-labelledby="headingPages"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Account:</h6>
-                        <a asp-area="Manager" asp-controller="User" asp-action="Index" class="collapse-item active">List Account</a>
-                        <a asp-area="Manager" asp-controller="User" asp-action="Create" class="collapse-item active">Create</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Custom Role:</h6>
-                        <a asp-area="Manager" asp-controller="Role" asp-action="Index" class="collapse-item active">List Role</a>
-                        <a asp-area="Manager" asp-controller="Role" asp-action="Create" class="collapse-item active">Create</a>
-                        <a asp-area="Manager" asp-controller="Role" asp-action="Assign" class="collapse-item active">Assign</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Database -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDatabases" aria-expanded="true"
-                    aria-controls="collapsePages">
-                    <i class="fas fa-database"></i>
-                    <span>Database</span>
-                </a>
-                <div id="collapseDatabases" class="collapse" aria-labelledby="headingPages"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Infomation :</h6>
-                        <a target="_blank" asp-area="Files" asp-controller="FileManager" asp-action="Index" class="collapse-item active">Files</a>
-                        <a asp-area="Database" asp-controller="DbManage" asp-action="Index" class="collapse-item active">Databases</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
+           
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">

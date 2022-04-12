@@ -1,0 +1,47 @@
+﻿
+<hr class="sidebar-divider">
+<!-- Heading -->
+<div class="sidebar-heading">
+    Manage
+</div>
+
+<!-- Nav Item - Account -->
+<li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAccounts" aria-expanded="true"
+        aria-controls="collapsePages">
+        <i class="fas fa-fw fa-user"></i>
+        <span>Accounts</span>
+    </a>
+    <div id="collapseAccounts" class="collapse" aria-labelledby="headingPages"
+        data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Custom Account:</h6>
+            <a asp-area="Manager" asp-controller="User" asp-action="Index" class="collapse-item active">List Account</a>
+            <a asp-area="Manager" asp-controller="User" asp-action="Create" class="collapse-item active">Create</a>
+            <div class="collapse-divider"></div>
+            <h6 class="collapse-header">Custom Role:</h6>
+            <a asp-area="Manager" asp-controller="Role" asp-action="Index" class="collapse-item active">List Role</a>
+            <a asp-area="Manager" asp-controller="Role" asp-action="Create" class="collapse-item active">Create</a>
+            <a asp-area="Manager" asp-controller="Role" asp-action="Assign" class="collapse-item active">Assign</a>
+        </div>
+    </div>
+</li>
+
+<!-- Nav Item - Database -->
+<li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDatabases" aria-expanded="true"
+        aria-controls="collapsePages">
+        <i class="fas fa-database"></i>
+        <span>Database</span>
+    </a>
+    <div id="collapseDatabases" class="collapse" aria-labelledby="headingPages"
+        data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Infomation :</h6>
+            <a target="_blank" asp-area="Files" asp-controller="FileManager" asp-action="Index" class="collapse-item active">Files</a>
+            <a asp-area="Database" asp-controller="DbManage" asp-action="Index" class="collapse-item active">Databases</a>
+        </div>
+    </div>
+</li>
+<!-- Divider -->
+<hr class="sidebar-divider d-none d-md-block">

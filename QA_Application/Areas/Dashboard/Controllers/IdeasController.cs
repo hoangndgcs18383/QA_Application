@@ -18,7 +18,6 @@ using static QA_Application.Helper;
 namespace QA_Application.Areas.Admin.Controllers
 {
     [Area("Dashboard")]
-    [Authorize]
     public class IdeasController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -35,6 +34,7 @@ namespace QA_Application.Areas.Admin.Controllers
         }
 
         // GET: Admin/Ideas
+        [Authorize]
         public async Task<IActionResult> Index([FromQuery(Name = "p")] int currentPage, int pageSize)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -83,6 +83,7 @@ namespace QA_Application.Areas.Admin.Controllers
             return View(ideasInPage);
         }
 
+        [Authorize]
         // GET: Admin/GetPost
         public async Task<IActionResult> GetPost(Idea idea, [FromQuery(Name = "p")] int currentPage, int pageSize)
         {
@@ -159,6 +160,37 @@ namespace QA_Application.Areas.Admin.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             ViewBag.count = idea.CountThumb;
+            ViewBag.like = idea.CountThumbUp;
+            ViewBag.dislike = idea.CountThumbDown;
+
+            var dateTime = Time(idea.CreatedDate);
+
+            ViewBag.time = dateTime;
+
+            if (idea == null)
+            {
+                return NotFound();
+            }
+
+            return View(idea);
+        }
+
+        // GET: Admin/Ideas/Details/5
+        public async Task<IActionResult> Review(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var idea = await _context.Ideas
+                .Include(i => i.Author)
+                .Include(i => i.Category)
+                .Include(i => i.SpecialTag)
+                .Include(i => i.Comments)
+                .Include(i => i.Department)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
 
             var dateTime = Time(idea.CreatedDate);
 
@@ -174,6 +206,7 @@ namespace QA_Application.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> AddComment(CommentViewModel model)
         {
             var idea = await _context.Ideas
@@ -200,36 +233,18 @@ namespace QA_Application.Areas.Admin.Controllers
                 _context.Update(idea);
 
             }
+
+
             await _context.SaveChangesAsync();
             return RedirectToAction("Details", new { id = model.IdeaId });
 
 
         }
 
-        public async Task<IActionResult> RemoveComment(int? id)
-        {
-
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var comment = await _context.Comments
-                 .Include(i => i.Author)
-                 .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (comment == null)
-            {
-                return NotFound();
-            }
-
-            return View(comment);
-        }
-
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> RemoveComment(int id)
         {
 
@@ -247,11 +262,12 @@ namespace QA_Application.Areas.Admin.Controllers
 
             _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
-            return Json(new { html = RenderRazorViewToString(this, "Details", _context.Comments.ToList()) });
+            return RedirectToAction("Details", new { id = id });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> ThumbUp(int id, ThumbViewModel model)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -269,12 +285,13 @@ namespace QA_Application.Areas.Admin.Controllers
 
             if (model.ThumbId == 0)
             {
-                var search = idea.Thumbs.FirstOrDefault(i => i.AuthorId == userId && i.toggle == "like");
+                var search = idea.Thumbs.FirstOrDefault(i => i.AuthorId == userId && i.toggle == "like" && i.isThumb == true);
 
                 if (search != null)
                 {
                     _context.Remove(search);
                     idea.CountThumb--;
+                    idea.CountThumbUp--;
                     _context.Update(idea);
                     await _context.SaveChangesAsync();
                 }
@@ -286,10 +303,12 @@ namespace QA_Application.Areas.Admin.Controllers
                     idea.Thumbs.Add(new Thumb
                     {
                         AuthorId = userId,
-                        toggle = "like"
+                        toggle = "like",
+                        isThumb = true
                     });
 
                     idea.CountThumb++;
+                    idea.CountThumbUp++;
                     _context.Update(idea);
                     await _context.SaveChangesAsync();
                 }
@@ -307,6 +326,7 @@ namespace QA_Application.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> ThumbDown(int id, ThumbViewModel model)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -324,12 +344,13 @@ namespace QA_Application.Areas.Admin.Controllers
 
             if (model.ThumbId == 0)
             {
-                var search = idea.Thumbs.FirstOrDefault(i => i.AuthorId == userId && i.toggle == "dislike");
+                var search = idea.Thumbs.FirstOrDefault(i => i.AuthorId == userId && i.toggle == "dislike" && i.isThumb == true);
 
                 if (search != null)
                 {
                     _context.Remove(search);
                     idea.CountThumb++;
+                    idea.CountThumbDown--;
                     _context.Update(idea);
                     await _context.SaveChangesAsync();
                 }
@@ -341,10 +362,12 @@ namespace QA_Application.Areas.Admin.Controllers
                     idea.Thumbs.Add(new Thumb
                     {
                         AuthorId = userId,
-                        toggle = "dislike"
+                        toggle = "dislike",
+                        isThumb = true,
                     });
 
                     idea.CountThumb--;
+                    idea.CountThumbDown++;
                     _context.Update(idea);
                     await _context.SaveChangesAsync();
                 }
@@ -361,6 +384,7 @@ namespace QA_Application.Areas.Admin.Controllers
         }
 
         // GET: Admin/Ideas/Create
+        [Authorize]
         public IActionResult Create()
         {
             ViewData["DepartmentId"] = new SelectList(_context.Department, "Id", "DepartmentName");
@@ -398,7 +422,7 @@ namespace QA_Application.Areas.Admin.Controllers
 
                 if (fileSubmit != null)
                 {
-                    string path = Path.Combine(_webHostEnvironment.ContentRootPath, "Uploads");
+                    string path = Path.Combine(_webHostEnvironment.WebRootPath, "Uploads");
 
                     if (!Directory.Exists(path))
                     {
@@ -436,6 +460,7 @@ namespace QA_Application.Areas.Admin.Controllers
         }
 
         // GET: Admin/Ideas/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -492,7 +517,7 @@ namespace QA_Application.Areas.Admin.Controllers
 
                     if (fileSubmit != null)
                     {
-                        string path = Path.Combine(_webHostEnvironment.ContentRootPath, "Uploads");
+                        string path = Path.Combine(_webHostEnvironment.WebRootPath, "Uploads");
 
                         if (!Directory.Exists(path))
                         {
@@ -550,6 +575,7 @@ namespace QA_Application.Areas.Admin.Controllers
         // POST: Admin/Ideas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             TempData["Success"] = "Ideas has been deleted successfully";

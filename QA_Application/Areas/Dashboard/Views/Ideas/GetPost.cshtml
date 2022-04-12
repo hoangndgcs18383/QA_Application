@@ -5,6 +5,13 @@
 }
 
 
+<nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index">Idea</a></li>
+    <li class="breadcrumb-item active" aria-current="page">List Posts</li>
+  </ol>
+</nav>
+
 <div class="cards-wrapper">
     @foreach (var item in Model)
     {
@@ -15,19 +22,27 @@
                 src="https://cms.greenwich.edu.vn/pluginfile.php/1/theme_adaptable/frontpagerendererdefaultimage/1640228920/edu-survey-landing-image.jpg" alt="">
 
             <div class="card-body">
-                <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
+                <h5 class="card-title text-truncate">@Html.DisplayFor(modelItem => item.Title)</h5>
                 @*<p class="card-text para-mini">@Html.Raw(item.Content)</p>*@
                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">See Details</a>
             </div>
             <div class="card-footer text-muted">
                 @if(item.Category.ParentCategory != null)
                     {
-                         <a href="#" class="badge badge-primary">@Html.DisplayFor(modelItem => item.Category.ParentCategory.CategoryName)</a>
+                         <span class="badge badge-primary">@Html.DisplayFor(modelItem => item.Category.ParentCategory.CategoryName)</span>
                     }
-                <a asp-route-id="@item.CategoryId" asp-action="Details" asp-controller="Categories" asp-area="Dashboard" class="badge badge-secondary">@Html.DisplayFor(modelItem => item.Category.CategoryName)</a>   
-                <a href="#" class="badge badge-success">@Html.DisplayFor(modelItem => item.SpecialTag.SpecialTagName)</a>
+                <span class="badge badge-secondary">@Html.DisplayFor(modelItem => item.Category.CategoryName)</span>   
+                <span class="badge badge-success">@Html.DisplayFor(modelItem => item.SpecialTag.SpecialTagName)</span>
+               
             </div>
         </div>
+        }
+
+        if(item == null)
+        {
+            <div class="ratio ratio-16x9">
+                <iframe src="https://serving.photos.photobox.com/125041954ddaf49b2d6b1ccdee9e33dfbe8f96f337b3be0b7901c59a55f88268748c1c20.jpg" title="YouTube video" allowfullscreen></iframe>
+            </div>
         }
     }
 

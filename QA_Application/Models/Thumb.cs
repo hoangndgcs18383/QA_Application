@@ -9,5 +9,6 @@ namespace QA_Application.Models
         [ForeignKey("AuthorId")]
         public ApplicationUser Author { get; set; }
         public string toggle { get; set; } = null;
+        public bool isThumb { get; set; } = false;
     }
 }

@@ -1,7 +1,6 @@
 ﻿@model CommentViewModel
 
 
-
 <div class="row justify-content-center">
     <div class="col-lg-6">
             <hr>
@@ -10,13 +9,10 @@
                 <input asp-for="IdeaId" type="hidden" name"ideas" />
                 <input asp-for="CommentId" type="hidden" name"comments" />
                 <div class="form-group">
+                    @*Viết comment ở đây*@
                     <input  asp-for="Message" type="text" class="form-control form-control-user"
-                        id="tags" placeholder="Write a comment...">
-                </div>
-
-@*                 <button type="submit" class="btn btn-success btn-icon-split btn-block">
-                    <span class="text">Submit</span>
-                 </button>*@
+                        id="tags" placeholder="Write a comment..." required>
+                </div>s
             </form>
             <hr>
     </div>

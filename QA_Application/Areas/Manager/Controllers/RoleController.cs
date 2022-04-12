@@ -10,7 +10,7 @@ using System.ComponentModel;
 namespace QA_Application.Areas.Manager.Controllers
 {
     [Area("Manager")]
-  
+    [Authorize(Roles ="Admin")]
     public class RoleController : Controller
     {
         RoleManager<IdentityRole> _roleManager;

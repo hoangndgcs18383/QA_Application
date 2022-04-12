@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QA_Application.Data;
@@ -7,6 +8,7 @@ using QA_Application.Models;
 namespace QA_Application.Areas.Database.Controllers
 {
     [Area("Database")]
+    [Authorize(Roles = ("Admin"))]
     [Route("/database-manager/[action]")]
     public class DbManageController : Controller
     {

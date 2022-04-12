@@ -13,5 +13,8 @@ namespace QA_Application.ViewModels
         public ApplicationUser Author { get; set; }
         public string toggle { get; set; }
         public int IdeaId { get; set; }
+
+        public int Like { get; set; }
+        public int Dislike { get; set; }
     }
 }

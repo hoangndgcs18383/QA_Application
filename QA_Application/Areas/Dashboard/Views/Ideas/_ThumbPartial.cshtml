@@ -2,14 +2,14 @@
 
 <form class="form-inline offset-md-2" asp-action="ThumbUp" asp-route-id="@Model.IdeaId" method="post">
     <button id="like-btn" name="like" type="submit" class="btn btn-primary">
-        <i class="fas fa-thumbs-o-up"></i>
-        Like 
+        <i class="fa fa-thumbs-up"></i>
+        @Model.Like
     </button>
 </form>
 
 <form class="form-inline offset-md-1" asp-action="ThumbDown" asp-route-id="@Model.IdeaId" method="post">
 <button name="dislike" type="submit" class="btn btn-primary">
-    <i class="fas fa-thumbs-o-up" aria-hidden="true"></i>
-    Dislike
+    <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+    @Model.Dislike
 </button>
 </form>

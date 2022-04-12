@@ -4,6 +4,13 @@
     ViewData["Title"] = "Create";
 }
 
+<nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index">Account</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Create</li>
+  </ol>
+</nav>
+
 <div class="row justify-content-center">
     <div class="col-lg-6">
         <div class="p-5">
@@ -14,27 +21,27 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <h3>@ViewBag.error</h3>
 
-               <div class="form-group">
-                    <input  asp-for="FirstName" type="text" class="form-control form-control-user"
-                        id="title" placeholder="Enter Fist Name...">
-                     <span asp-validation-for="UserName" class="text-danger"></span>
-                </div>
+                <div class="form-group row">
+                    <div class="col-sm-6 mb-3 mb-sm-0">
+                        <input asp-for="FirstName" type="text" class="form-control form-control-user" id="exampleFirstName"
+                            placeholder="First Name" required>
+                    </div>
+                    <div class="col-sm-6">
+                        <input asp-for="LastName" type="text" class="form-control form-control-user" id="exampleLastName"
+                            placeholder="Last Name" required>
+                    </div>
+               </div>
 
-                <div class="form-group">
-                    <input  asp-for="LastName" type="text" class="form-control form-control-user"
-                        id="title" placeholder="Enter Last Name...">
-                     <span asp-validation-for="UserName" class="text-danger"></span>
-                </div>
 
                 <div class="form-group">
                     <input  asp-for="UserName" type="email" class="form-control form-control-user"
-                        id="title" placeholder="Enter Title...">
+                        id="title" placeholder="Enter email..." required>
                      <span asp-validation-for="UserName" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
                     <input  asp-for="PasswordHash" type="password" class="form-control form-control-user"
-                        id="password" placeholder="Enter Password...">
+                        id="password" placeholder="Enter Password..." required>
                      <span asp-validation-for="PasswordHash" class="text-danger"></span>
                 </div>
 

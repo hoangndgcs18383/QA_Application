@@ -330,8 +330,14 @@ namespace QA_Application.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("CountThumb")
-                        .HasColumnType("bigint");
+                    b.Property<int>("CountThumb")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CountThumbDown")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CountThumbUp")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -402,6 +408,9 @@ namespace QA_Application.Migrations
 
                     b.Property<int?>("IdeaId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("isThumb")
+                        .HasColumnType("bit");
 
                     b.Property<string>("toggle")
                         .IsRequired()

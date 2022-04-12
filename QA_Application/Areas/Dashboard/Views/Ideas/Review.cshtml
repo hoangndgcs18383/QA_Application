@@ -7,15 +7,12 @@
     var finalDeadline = Model.Category.FinalDeadline;
     var now = DateTime.Now;
     var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-    var checkIsThumb = Model.Thumbs?.FirstOrDefault(i => i.AuthorId == userId && i.isThumb == false);
-    var checkIsLike = Model.Thumbs?.FirstOrDefault(i => i.AuthorId == userId && i.toggle == "like" && i.isThumb == true);
-    var checkIsDislike = Model.Thumbs?.FirstOrDefault(i => i.AuthorId == userId && i.toggle == "dislike" && i.isThumb == true);
 }
 
 <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a asp-action="Index">Idea</a></li>
-    <li class="breadcrumb-item"><a asp-action="GetPost">Details</a></li>
+    <li class="breadcrumb-item"><a asp-action="GetPost">Review</a></li>
     <li class="breadcrumb-item active" aria-current="page">@Model.Id</li>
   </ol>
 </nav>
@@ -71,86 +68,38 @@
 
                 @if(Model.Category.ParentCategory != null)
                     {
-                         <span class="badge badge-primary">@Html.DisplayFor(modelItem => modelItem.Category.ParentCategory.CategoryName)</span>
+                         <a href="#" class="badge badge-primary">@Html.DisplayFor(modelItem => modelItem.Category.ParentCategory.CategoryName)</a>
                     }
-                <span
-                    class="badge badge-secondary">@Html.DisplayFor(modelItem => modelItem.Category.CategoryName)</span>
+                <a href="#" 
+                    class="badge badge-secondary">@Html.DisplayFor(modelItem => modelItem.Category.CategoryName)</a>
                     
-                <span class="badge badge-success">@Html.DisplayFor(modelItem => modelItem.SpecialTag.SpecialTagName)</span>
+                <a href="#" class="badge badge-success">@Html.DisplayFor(modelItem => modelItem.SpecialTag.SpecialTagName)</a>
 
-                <span class="badge badge-info">@Html.DisplayFor(modelItem => modelItem.Department.DepartmentName)</span>
-
-                <span class="badge badge-warning">Anonymous</span>
-
-                <hr>
-
-                
-
-                <div class ="form-inline">
-                    @if(checkIsThumb == null)
-                    {
-                        await Html.RenderPartialAsync("_ThumbPartial", new ThumbViewModel { IdeaId = Model.Id, ThumbId = 0 ,AuthorId = userId , Like = ViewBag.like, Dislike = ViewBag.dislike});
-                    }
-                </div>
             </div>
         </div>
     </div>
-
-@{
-    await Html.RenderPartialAsync("_CommentPartial", new CommentViewModel { IdeaId = Model.Id, CommentId = 0 });
-}
 
 @foreach(var c in Model.Comments)
 {
     if(c != null)
     {
-        var predix = "idea";
-        var deleteAction = "RemoveComment";
-
-        var delete = new ActionPopup {
-        Id = @c.Id,
-        Predix = predix,
-        Title = "This message",
-        Name = deleteAction,
-        Action = deleteAction,
-        Labell = "labelledbyDelete"
-        };
-
-        <partial name="_ActionPopup" model="delete"></partial>
-
         <div class="col-lg-6">
-
-
-            
 
         <!-- Default Card Example -->
         <div class="card mb-4">
-            <div
-                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <div class="card-header">
                 <i class="fas fa-comments fa-2x text-gray-300"></i>
                 answer by @userId
-
-                <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                        aria-labelledby="dropdownMenuLink">
-                        <div class="dropdown-header">Options:</div>
-                        <a asp-action="Edit" class="dropdown-item">Edit post</a>
-                        <a href="#" data-toggle="modal" data-target="#@predix@c.Id@deleteAction">Delete</a>
-                        <div class="dropdown-divider"></div>
-                        <a asp-action="GetPost" class="dropdown-item">Back to Dashboard</a>
-                    </div>
-                </div>
             </div>
             <div class="card-body">
                 Reply: @c.Message
             </div>
         </div>
     </div>
-
+    <form asp-action="RemoveComment" method="post" asp-route-id="@c.Id" onsubmit="return jQueryAjaxDelete(this);">
+                <input type="submit" value="Delete" class="btn btn--primary" />
+    </form>
     }
 }
 </div>
+

@@ -31,7 +31,7 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromDays(1);
+    options.IdleTimeout = TimeSpan.FromDays(2);
     options.Cookie.HttpOnly = false;
     options.Cookie.IsEssential = true;
 });
@@ -45,7 +45,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireLowercase = true;
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequireUppercase = true;
-    options.Password.RequiredLength = 6;
+    options.Password.RequiredLength = 8;
     options.Password.RequiredUniqueChars = 1;
 
     // Lockout settings.
@@ -85,14 +85,15 @@ else
 }
 
 app.UseHttpsRedirection();
+    
 app.UseStaticFiles();
 
-app.UseStaticFiles(new StaticFileOptions() { 
+/*app.UseStaticFiles(new StaticFileOptions() { 
     FileProvider = new PhysicalFileProvider(
        Path.Combine(Directory.GetCurrentDirectory(), "Uploads")  
     ),
-    RequestPath = "/contents"
-});
+    RequestPath = "/Uploads"
+});*/
 
 app.UseRouting();
 app.UseSession();

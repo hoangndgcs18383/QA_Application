@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using QA_Application.Models;
 namespace QA_Application.Areas.Dashboard.Controllers
 {
     [Area("Dashboard")]
+    [Authorize(Roles = ("Admin, Manager"))]
     public class DepartmentsController : Controller
     {
         private readonly ApplicationDbContext _context;
