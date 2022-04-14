@@ -16,7 +16,7 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a asp-action="Index">Idea</a></li>
     <li class="breadcrumb-item"><a asp-action="GetPost">Details</a></li>
-    <li class="breadcrumb-item active" aria-current="page">@Model.Id</li>
+    <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
   </ol>
 </nav>
 
@@ -44,7 +44,9 @@
 <div class="row justify-content-center">
         <div class="col-lg-6">
         <div class="card shadow mb-4">
-            <div
+            @if(firstDeadline > now)
+            {
+                <div
                 class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">User-@userId posted</h6>
                     <br />
@@ -58,13 +60,14 @@
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                         aria-labelledby="dropdownMenuLink">
                         <div class="dropdown-header">Options:</div>
-                        <a asp-action="Edit" class="dropdown-item">Edit post</a>
+                        <a asp-action="Edit" asp-route-id=@Model?.Id class="dropdown-item">Edit post</a>
                         <a href="#" class="dropdown-item" data-toggle="modal" data-target="#deleteModelInPost">Delete</a>
                         <div class="dropdown-divider"></div>
                         <a asp-action="GetPost" class="dropdown-item">Back to Dashboard</a>
                     </div>
                 </div>
             </div>
+            }
             <div class="card-body">
                 <div class="h5 mb-0 font-weight-bold text-gray-800">@Html.DisplayFor(model => model.Title)</div>
                 @Html.Raw(Model.Content)
@@ -89,14 +92,21 @@
                 <div class ="form-inline">
                     @if(checkIsThumb == null)
                     {
-                        await Html.RenderPartialAsync("_ThumbPartial", new ThumbViewModel { IdeaId = Model.Id, ThumbId = 0 ,AuthorId = userId , Like = ViewBag.like, Dislike = ViewBag.dislike});
+                        if(finalDeadline > now)
+                        {
+                            await Html.RenderPartialAsync("_ThumbPartial", new ThumbViewModel { IdeaId = Model.Id, ThumbId = 0 ,AuthorId = userId , Like = ViewBag.like, Dislike = ViewBag.dislike});
+                        }
+                        else
+                        {
+                            await Html.RenderPartialAsync("_ThumbDisablePartial", new ThumbViewModel { IdeaId = Model.Id, ThumbId = 0 ,AuthorId = userId , Like = ViewBag.like, Dislike = ViewBag.dislike});
+                        }
                     }
                 </div>
             </div>
         </div>
     </div>
-
-@{
+@if(finalDeadline > now)
+{
     await Html.RenderPartialAsync("_CommentPartial", new CommentViewModel { IdeaId = Model.Id, CommentId = 0 });
 }
 
@@ -118,39 +128,38 @@
 
         <partial name="_ActionPopup" model="delete"></partial>
 
-        <div class="col-lg-6">
 
 
-            
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+            <!-- Default Card Example -->
+            <div class="card mb-4">
+                <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <i class="fas fa-comments fa-2x text-gray-300"></i>
+                    answer by @userId
 
-        <!-- Default Card Example -->
-        <div class="card mb-4">
-            <div
-                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <i class="fas fa-comments fa-2x text-gray-300"></i>
-                answer by @userId
-
-                <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                        aria-labelledby="dropdownMenuLink">
-                        <div class="dropdown-header">Options:</div>
-                        <a asp-action="Edit" class="dropdown-item">Edit post</a>
-                        <a href="#" data-toggle="modal" data-target="#@predix@c.Id@deleteAction">Delete</a>
-                        <div class="dropdown-divider"></div>
-                        <a asp-action="GetPost" class="dropdown-item">Back to Dashboard</a>
-                    </div>
+                    @*<div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                            aria-labelledby="dropdownMenuLink">
+                            <div class="dropdown-header">Options:</div>
+                            <a asp-action="Edit" class="dropdown-item">Edit post</a>
+                            <a href="#" data-toggle="modal" data-target="#@predix@c.Id@deleteAction">Delete</a>
+                            <div class="dropdown-divider"></div>
+                            <a asp-action="GetPost" class="dropdown-item">Back to Dashboard</a>
+                        </div>
+                    </div>*@
                 </div>
-            </div>
-            <div class="card-body">
-                Reply: @c.Message
+                <div class="card-body">
+                    Reply: @c.Message
+                </div>
             </div>
         </div>
     </div>
-
     }
 }
 </div>

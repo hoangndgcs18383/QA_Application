@@ -21,7 +21,7 @@
             </div>
             <form asp-action="Create" method="post" enctype="multipart/form-data" class="user">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <h3>@ViewBag.error</h3>
+                <h3 class="text-danger">@ViewBag.error</h3>
                 <input type="hidden" asp-for="Id" />
                 <div class="form-group">
                     <label asp-for="DepartmentId"></label>

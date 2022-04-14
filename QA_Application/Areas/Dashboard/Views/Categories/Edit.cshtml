@@ -8,7 +8,7 @@
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a asp-action="Index">Category</a></li>
     <li class="breadcrumb-item"><a asp-action="Index">Edit</a></li>
-    <li class="breadcrumb-item active" aria-current="page">@Model.Id</li>
+    <li class="breadcrumb-item active" aria-current="page">@Model.CategoryName</li>
   </ol>
 </nav>
 
@@ -20,7 +20,7 @@
             </div>
             <form asp-action="Edit" method="post" enctype="multipart/form-data" class="user">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <h3>@ViewBag.error</h3>
+                <h3 class="text-danger">@ViewBag.error</h3>
                 <input type="hidden" asp-for="Id" />
                 <div class="form-group">
                     <label asp-for="ParentCategoryId"></label>
